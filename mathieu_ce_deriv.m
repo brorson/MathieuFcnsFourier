@@ -30,7 +30,7 @@ function ced = mathieu_ce_deriv(m, q, v)
     % Sum on 1, 3, 5, 7, ...
     % Sum from smallest to largest coeff.
     % k = (0:N-1)';
-    ce = zeros(size(v));
+    ced = zeros(size(v));
     for k=(N-1):-1:0
       ced = ced - (2*k+1)*A(k+1)*sin((2*k+1)*v);
     end

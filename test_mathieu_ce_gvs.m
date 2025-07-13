@@ -2,13 +2,14 @@ function test_mathieu_ce_gvs()
   % This reads a file of Mathieu ce golden values and uses them
   % to test the output of my ce impl.
     
-  
-  % Read file holding GVs
-  M = csvread('mathieu_ce_gvs.csv');
-
   % Later I will put the q value into the header of the GV file.
   % Right now I use q = 1;
-  q = 1;
+  q = 10;
+  
+  % Read file holding GVs
+  %M = csvread('mathieu_ce_gvs.csv');
+  M = csvread('mathieu_ce_gvs_q10.csv');    
+  %M = csvread('mathieu_ce_gvs_q0.1.csv');  
   
   % The first col holds the v values.
   v = M(:,1)';
@@ -30,8 +31,8 @@ function test_mathieu_ce_gvs()
   title('my ce')
   
   for i=1:size(diff,2)
-    ndiff = norm(diff(:,i));
-    fprintf('Order = %d, normdiff = %e\n', i-1, ndiff)
+    ndiff = norm(diff(:,i))/size(diff,2);
+    fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
   end
   
   

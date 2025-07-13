@@ -2,14 +2,15 @@ function test_mathieu_se_gvs()
   % This reads a file of Mathieu se golden values and uses them
   % to test the output of my se impl.
     
-  
-  % Read file holding GVs
-  M = csvread('mathieu_se_gvs.csv');
-
   % Later I will put the q value into the header of the GV file.
   % Right now I use q = 1;
-  q = 1;
+  q = 10;
   
+  % Read file holding GVs
+  %M = csvread('mathieu_se_gvs.csv');
+  M = csvread('mathieu_se_gvs_q10.csv');  
+  %M = csvread('mathieu_se_gvs_q0.1.csv');    
+
   % The first col holds the v values.
   v = M(:,1)';
   
@@ -31,8 +32,8 @@ function test_mathieu_se_gvs()
   title('my se')
   
   for i=1:size(diff,2)
-    ndiff = norm(diff(:,i));
-    fprintf('Order = %d, normdiff = %e\n', i, ndiff)
+    ndiff = norm(diff(:,i))/size(diff,1);
+    fprintf('Order = %d, relnormdiff = %e\n', i, ndiff)
   end
   
   

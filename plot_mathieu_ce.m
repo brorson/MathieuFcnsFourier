@@ -1,7 +1,7 @@
 function plot_mathieu_ce()
   % This plots the Mathieu ce fcns.
     
-  q = 1;
+  q = 10;
 
   v = linspace(0,pi/2,100);
 
