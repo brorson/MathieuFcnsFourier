@@ -17,8 +17,9 @@ function B = mathieu_coeffs_oe(N,q,m)
   %disp(D(idx))
 
   col = round(m/2);
-  fprintf('mathieu_coeffs_oe, col = %d\n', col)
-  B = V(1:N,col);
+  s = 1; % sign(V(1,col));
+  %fprintf('mathieu_coeffs_oe, col = %d\n', col)
+  B = s*V(1:N,col);
   
 end
 

@@ -7,12 +7,17 @@ function A = make_matrix_ee(N, q)
   % Output:
   % A = recurrence matrix.
     
+  if (N < 3)
+    error('Must ask for matrix of size 3 or greater.')
+  end 
+   
   % Form matrix
   %A = sparse(N,N);  
   A = zeros(N,N);    
   A(1,1) = 0;  % Redundant I know.
   %A(1,2) = q;
   %A(2,1) = 2*q;
+  % Symmetrize matrix here, then fix in caller.
   A(1,2) = sqrt(2)*q;
   A(2,1) = sqrt(2)*q;
   A(2,2) = 2^2;

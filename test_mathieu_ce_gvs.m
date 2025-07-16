@@ -2,14 +2,22 @@ function test_mathieu_ce_gvs()
   % This reads a file of Mathieu ce golden values and uses them
   % to test the output of my ce impl.
     
-  % Later I will put the q value into the header of the GV file.
-  % Right now I use q = 1;
-  q = 10;
-  
   % Read file holding GVs
-  %M = csvread('mathieu_ce_gvs.csv');
-  M = csvread('mathieu_ce_gvs_q10.csv');    
-  %M = csvread('mathieu_ce_gvs_q0.1.csv');  
+  %filename = 'mathieu_ce_gvs_q10.csv';
+  %filename = 'mathieu_ce_gvs_q0.1.csv';
+
+  filename = 'mathieu_ce_gvs_q1.csv';
+
+  % Read data out of the file in the most hacky way possible.
+  % The first row holds the q value
+  fid = fopen(filename,'r');
+  q = fscanf(fid,'%f',1);
+  fclose(fid);
+
+  fprintf('Golden value test, filename = %s, q = %f\n', filename, q)
+  
+  % The remaining rows hold the GV data.
+  M = csvread(filename,1,0);  
   
   % The first col holds the v values.
   v = M(:,1)';

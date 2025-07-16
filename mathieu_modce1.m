@@ -57,7 +57,7 @@ function Ce = mathieu_modce1(m, q, u)
   %  Ce = -Ce;
   %end
   %[~,k] = max(abs(A));
-  %if (A(k)*(-1^(k-1)) < 0)
+  %if (A(k)*((-1)^(k-1)) < 0)
   %  %Ce = -Ce;
   %end
 

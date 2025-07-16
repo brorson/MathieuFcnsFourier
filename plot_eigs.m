@@ -6,10 +6,10 @@ function plot_eigs()
   N = 500;
   
   % Domain of q values to examine (for plotting)
-  qs = linspace(0,250,N)';
+  qs = linspace(-50,50,N)';
   
   % Number of each type of eigenvalue to track
-  Ne = 25;  % Ne of a and Ne of b
+  Ne = 9;  % Ne of a and Ne of b
 
 
   %---------------------------------------------
@@ -37,7 +37,7 @@ function plot_eigs()
   c = {};
   for j=1:Ne
     hold on
-    plot(qs,as(:,j),'-')
+    plot(qs,as(:,j),'b-','LineWidth',2)
     c = [c, ['a',num2str(j-1)]];
   end
 
@@ -66,13 +66,13 @@ function plot_eigs()
   %figure(1)
   for j=1:Ne
     hold on
-    plot(qs,bs(:,j),'--')
+    plot(qs,bs(:,j),'r--','LineWidth',2)
     c = [c, ['b',num2str(j)]];
   end
   
   % Turn these on to reproduce the DLMF plot
-  xlim([0,10]);
-  ylim([-5,20]);
+  %xlim([0,10]);
+  %ylim([-5,20]);
   
   title('First Mathieu eigenvalues vs. q')
   xlabel('q')

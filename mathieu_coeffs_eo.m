@@ -17,7 +17,8 @@ function A = mathieu_coeffs_eo(N,q,m)
   %disp(D(idx))
   
   col = round( (m+1)/2 );
-  fprintf('mathieu_coeffs_eo, col = %d\n', col)
-  A = V(1:N,col);
+  s = 1; % sign(V(1,col));  % Attempt to fix sign problems
+  %fprintf('mathieu_coeffs_eo, col = %d\n', col)
+  A = s*V(1:N,col);
   
 end

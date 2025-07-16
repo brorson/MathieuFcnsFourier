@@ -7,6 +7,10 @@ function A = make_matrix_oe(N, q)
   % Output:
   % A = recurrence matrix.
     
+  if (N < 3)
+    error('Must ask for matrix of size 3 or greater.')
+  end
+    
   % Form matrix
   %A = sparse(N,N);  
   A = zeros(N,N);    

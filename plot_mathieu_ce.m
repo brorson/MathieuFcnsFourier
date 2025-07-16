@@ -1,14 +1,14 @@
 function plot_mathieu_ce()
   % This plots the Mathieu ce fcns.
     
-  q = 10;
+  q = -10;
 
-  v = linspace(0,pi/2,100);
+  v = linspace(-pi/2,pi/2,100);
 
   % First do even ce fcns
   leg = {};
   figure(1)
-  for m = 0:2:6
+  for m = 0:2:12
     %fprintf('-----------------------\n')    
     y = mathieu_ce(m,q,v);
     plot(v,y)
@@ -22,7 +22,7 @@ function plot_mathieu_ce()
   % Next do odd ce fcns
   leg = {};
   figure(2)
-  for m = 1:2:7
+  for m = 1:2:13
     %fprintf('-----------------------\n')
     y = mathieu_ce(m,q,v);
     plot(v,y)

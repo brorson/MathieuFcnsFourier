@@ -5,39 +5,72 @@ function se = mathieu_se(m, q, v)
     
   % I find the peak Fourier coeff tracks m.  Therefore
   % Adjust the matrix size based on order m.
-  N = m+10;
+  N = m+25;
   
   % Use different coeffs depending upon whether m is even or
   % odd.
   tol = 1e-14;
   if (abs(mod(m,2) < tol))
     % Even
-    fprintf('Even Mathieu se, m = %d\n', m)    
-    B = mathieu_coeffs_oe(N,q,m);
-    % sum on 2, 4, 6, 8 ...
-    % Sum from smallest to largest coeff
-    % k = (1:N)';
-    se = zeros(size(v));
+    %fprintf('Even Mathieu se, m = %d\n', m)    
+
+    B = mathieu_coeffs_oe(N,(q),m);
+    s = ones(size(B));
+    %if (q<0)
+    %  if (mod(m,4) < tol)
+    %    s(1:2:end) = -1;
+    %  else
+    %    s(2:2:end) = -1;
+    %  end
+    %end
+    % sum on 2, 4, 6, 8 ... sum pos and neg terms separately for stability
+    sep = zeros(size(v));
+    sem = zeros(size(v));
     for k=N:-1:1
-      se = se + B(k)*sin(2*k*v);
+      if (s(k)<0)
+        sem = sem + s(k)*B(k)*sin(2*k*v);
+      else
+        sep = sep + s(k)*B(k)*sin(2*k*v);
+      end
     end
+    se = sep+sem;
+    % Hack -- make sure deriv is positive at v = 0.
+    s = sign(sum(s.*B));
+    se = s*se;
+    
   else
     % Odd
-    fprintf('Odd Mathieu se, m = %d\n', m)
-    B = mathieu_coeffs_oo(N,q,m);
-    % sum on 1, 3, 5, 7, ...
-    % Sum from smallest to largest coeff
-    % k = (0:N-1)';
-    se = zeros(size(v));
+    % fprintf('Odd Mathieu se, m = %d\n', m)
+
+    B = mathieu_coeffs_oo(N,(q),m);
+    s = ones(size(B));
+    % sum on 1, 3, 5, 7, ... sum pos and neg terms separately for stability
+    sep = zeros(size(v));
+    sem = zeros(size(v));
     for k=(N-1):-1:0
-      se = se + B(k+1)*sin((2*k+1)*v);
+      if (s(k+1)<0)
+        sem = sem + s(k+1)*B(k+1)*sin((2*k+1)*v);
+      else
+        sep = sep + s(k+1)*B(k+1)*sin((2*k+1)*v);
+      end
     end
+    se = sep+sem;
+    % Hack -- make sure deriv is positive at v = 0.
+    if (q<0)
+      if (mod(m-1,4) < tol)
+        s(2:2:end) = -1;
+      else
+        s(1:2:end) = -1;
+      end
+    end
+    s = sign(sum(s.*B));
+    se = s*se;
   end
 
   % By defintion, all slopes are positive for v = 0.  Modify fcns
   % to obey this definition.
-  if (B(1) < 0)
-    se = -se;
-  end
+  %if (B(1) < 0)
+  %  se = -se;
+  %end
   
 end

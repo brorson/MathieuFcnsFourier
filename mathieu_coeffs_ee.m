@@ -9,19 +9,25 @@ function A = mathieu_coeffs_ee(N,q,m)
   
   M = make_matrix_ee(2*N,q);
   
+  % This invokes arpack
   %[V,D] = eigs(M,N,'largestabs');
+
+  % This invokes lapack
   [V,D] = eig(M);  
-  
+
+  % Sort ascending so low-order A coeffs are on LHS of
+  % V matrix.
   [D,idx] = sort(diag(D));
   V = V(:,idx);
-  %disp(D(idx))
-  
-  % Undo change to matrix
+    
+  % Undo change to matrix made in make_matrix_ee
   V(1,:) = V(1,:)/sqrt(2);
 
+
   col = round(m/2+1);
-  fprintf('mathieu_coeffs_ee, col = %d\n', col)
-  A = V(1:N,col);
+  s = 1; %sign(V(1,col));
+  %fprintf('mathieu_coeffs_ee, col = %d\n', col)
+  A = s*V(1:N,col);
   
 end
 

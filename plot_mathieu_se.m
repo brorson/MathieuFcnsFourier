@@ -1,14 +1,14 @@
 function plot_mathieu_se()
   % This plots the Mathieu se fcns.
     
-  q = 1;
+  q = -10;
 
-  v = linspace(0,pi/2,100);
+  v = linspace(-pi/2,pi/2,100);
 
   % First do even se fcns
   leg = {};
   figure(1)
-  for m = 2:2:8
+  for m = 2:2:14
     %fprintf('-----------------------\n')    
     y = mathieu_se(m,q,v);
     plot(v,y)
@@ -22,7 +22,7 @@ function plot_mathieu_se()
   % Next do odd se fcns
   leg = {};
   figure(2)
-  for m = 1:2:7
+  for m = 1:2:15
     %fprintf('-----------------------\n')
     y = mathieu_se(m,q,v);
     plot(v,y)
