@@ -2,11 +2,14 @@ function test_mathieu_se_deriv_gvs()
   % This reads a file of Mathieu se derivative golden values and uses them
   % to test the output of my se deriv impl.
     
-  % Read file holding GVs
-  %filename = 'mathieu_se_gvs_q10.csv';
-  %filename = 'mathieu_se_gvs_q0.1.csv';
-
-  filename = 'mathieu_se_deriv_gvs_q1.csv';
+  tol = 2e-3;  % Value is high to accomodate n=34.
+               % Also use high value since deriv is computed
+	       % using finite differences.
+  
+  fid = stdin();
+  filename = fscanf(fid,'%s');
+  
+  fprintf('filename = %s\n', filename)
 
   % Read data out of the file in the most hacky way possible.
   % The first row holds the q value
@@ -24,25 +27,28 @@ function test_mathieu_se_deriv_gvs()
   
   % The remaining cols hold Mathiue se deriv values for
   % m = 1, 2, ...
-  leg = {};
+  %leg = {};
   for i=2:size(M,2)
     sed_gold = M(:,i);
     m = i-1;  % 1, 2, 3, ...
     sed_mine = mathieu_se_deriv(m, q, v)';
-    plot(v,sed_mine)
-    leg = [leg,['my ',num2str(m)]];    
-    hold on
-    plot(v,sed_gold)
-    leg = [leg,['gv ',num2str(m)]];
+    %plot(v,sed_mine)
+    %leg = [leg,['my ',num2str(m)]];    
+    %hold on
+    %plot(v,sed_gold)
+    %leg = [leg,['gv ',num2str(m)]];
 
     diff(:,i-1) = sed_gold - sed_mine;
   end
-  legend(leg)
-  title('my sed')
+  %legend(leg)
+  %title('my sed')
   
   for i=1:size(diff,2)
     ndiff = norm(diff(:,i))/size(diff,2);
-    fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
+    % fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
+    if (ndiff > tol)
+      fprintf('Failure for order = %d, tol = %e, relnormdiff = %e\n', i-1, tol, ndiff)
+    end
   end
   
   

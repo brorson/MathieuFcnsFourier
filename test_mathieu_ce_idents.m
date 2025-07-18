@@ -16,7 +16,7 @@ function test_mathieu_ce_idents()
 
   %====================================================
   % First test normalization per DLMF 28.2.30
-  fprintf('Testing normalization ... \n')
+  fprintf('Testing normalization DLMF 28.2.30 ... \n')
   %MM = 10;   % This is max order to test
   for m=0:MM
     fprintf('-----------  m = %d  -----------\n', m)
@@ -42,7 +42,7 @@ function test_mathieu_ce_idents()
   
   %====================================================
   % Next test orthogonality per DLMF 28.2,31
-  fprintf('Testing orthogonality ... \n')
+  fprintf('Testing orthogonality per DLMF 28.2,31 ... \n')
   tol = 1e-11;
   %MM = 10;  % Max order to test
   for m1=0:MM;   for m2=m1:MM
@@ -74,7 +74,7 @@ function test_mathieu_ce_idents()
   
   %====================================================
   % Test q = 0 case per DLMF 28.2.29
-  fprintf('Test ce tends to cos for q = -1e-13 ... \n')
+  fprintf('Test ce tends to cos for q = -1e-13 per DLMF 28.2.29 ... \n')
   tol = 1e-12;
   q = -1e-13;
   %MM = 10;  % Max order to test
@@ -91,7 +91,7 @@ function test_mathieu_ce_idents()
     end
   end
   
-  fprintf('Test ce tends to cos for q = 0 ... \n')
+  fprintf('Test ce tends to cos for q = 0 per DLMF 28.2.29 ... \n')
   q = 0;
   %MM = 10;  % Max order to test
   for m=1:MM
@@ -107,7 +107,7 @@ function test_mathieu_ce_idents()
     end
   end
   
-    fprintf('Test ce tends to cos for q = 1e-13 ... \n')
+    fprintf('Test ce tends to cos for q = 1e-13 per DLMF 28.2.29 ... \n')
   q = 1e-13;
   %MM = 10;  % Max order to test
   for m=1:MM

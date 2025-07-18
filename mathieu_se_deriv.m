@@ -13,7 +13,7 @@ function sed = mathieu_se_deriv(m, q, v)
   tol = 1e-14;
   if (abs(mod(m,2) < tol))
     % Even
-    fprintf('Even Mathieu se deriv, m = %d\n', m)    
+    %fprintf('Even Mathieu se deriv, m = %d\n', m)    
     B = mathieu_coeffs_oe(N,q,m);
     % sum on 2, 4, 6, 8 ...
     % Sum from smallest to largest coeff
@@ -24,7 +24,7 @@ function sed = mathieu_se_deriv(m, q, v)
     end
   else
     % Odd
-    fprintf('Odd Mathieu se deriv, m = %d\n', m)
+    %fprintf('Odd Mathieu se deriv, m = %d\n', m)
     B = mathieu_coeffs_oo(N,q,m);
     % sum on 1, 3, 5, 7, ...
     % Sum from smallest to largest coeff

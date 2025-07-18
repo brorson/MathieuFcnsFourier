@@ -17,7 +17,7 @@ function test_mathieu_se_idents()
   
   %====================================================
   % First test normalization per DLMF 28.2.30
-  fprintf('Testing normalization ... \n')
+  fprintf('Testing normalization DLMF 28.2.30 ... \n')
   %MM = 10;   % This is max order to test
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
@@ -41,8 +41,8 @@ function test_mathieu_se_idents()
 
   
   %====================================================
-  % Next test orthogonality per DLMF 28.2,31
-  fprintf('Testing orthogonality ... \n')
+  % Next test orthogonality per DLMF 28.2,32
+  fprintf('Testing orthogonality DLMF 28.2,32 ... \n')
   tol = 1e-11;
   %MM = 10;  % Max order to test
   for m1=1:MM;   for m2=m1:MM

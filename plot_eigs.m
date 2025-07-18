@@ -6,7 +6,7 @@ function plot_eigs()
   N = 500;
   
   % Domain of q values to examine (for plotting)
-  qs = linspace(-50,50,N)';
+  qs = linspace(0,50,N)';
   
   % Number of each type of eigenvalue to track
   Ne = 9;  % Ne of a and Ne of b

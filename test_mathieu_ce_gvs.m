@@ -1,12 +1,13 @@
 function test_mathieu_ce_gvs()
   % This reads a file of Mathieu ce golden values and uses them
   % to test the output of my ce impl.
-    
-  % Read file holding GVs
-  %filename = 'mathieu_ce_gvs_q10.csv';
-  %filename = 'mathieu_ce_gvs_q0.1.csv';
 
-  filename = 'mathieu_ce_gvs_q1.csv';
+  tol = 2e-5;  % Value is high to accomodate n=34
+
+  fid = stdin();
+  filename = fscanf(fid,'%s');
+  
+  fprintf('filename = %s\n', filename)
 
   % Read data out of the file in the most hacky way possible.
   % The first row holds the q value
@@ -24,23 +25,26 @@ function test_mathieu_ce_gvs()
   
   % The remaining cols hold Mathiue ce values for
   % m = 0, 1, 2, ...
-  leg = {};
+  %leg = {};
   for i=2:size(M,2)
     ce_gold = M(:,i);
     m = i-2;
     ce_mine = mathieu_ce(m, q, v)';
-    plot(v,ce_mine)
-    hold on
-    leg = [leg,num2str(m)];
+    %plot(v,ce_mine)
+    %hold on
+    %leg = [leg,num2str(m)];
 
     diff(:,i-1) = ce_gold-ce_mine;
   end
-  legend(leg)
-  title('my ce')
+  %legend(leg)
+  %title('my ce')
   
   for i=1:size(diff,2)
     ndiff = norm(diff(:,i))/size(diff,2);
-    fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
+    %fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
+    if (ndiff > tol)
+      fprintf('Failure for order = %d, tol = %e, relnormdiff = %e\n', i-1, tol, ndiff)
+    end
   end
   
   
