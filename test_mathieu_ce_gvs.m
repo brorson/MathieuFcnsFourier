@@ -44,8 +44,11 @@ function test_mathieu_ce_gvs(varargin)
   %legend(leg)
   %title('my ce')
   
+  % Iterate over cols which correspond to different Mathieu orders.
   for i=1:size(diff,2)
-    ndiff = norm(diff(:,i))/size(diff,2);
+    % Normalize by number of pts in v since it varies when
+    % I modify the GVs.
+    ndiff = norm(diff(:,i))/length(v);
     %fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
     if (ndiff > tol)
       fprintf('Failure for order = %d, tol = %e, relnormdiff = %e\n', i-1, tol, ndiff)

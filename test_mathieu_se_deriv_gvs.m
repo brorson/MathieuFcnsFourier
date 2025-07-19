@@ -2,7 +2,7 @@ function test_mathieu_se_deriv_gvs(varargin)
   % This reads a file of Mathieu se derivative golden values and uses them
   % to test the output of my se deriv impl.
     
-  tol = 2e-1;  % Value is high to accomodate n=34.
+  tol = 2e-2;  % Value is high to accomodate n=34.
                % Also use high value since deriv is computed
 	       % using finite differences.
   
@@ -37,23 +37,35 @@ function test_mathieu_se_deriv_gvs(varargin)
     sed_gold = M(:,i);
     m = i-1;  % 1, 2, 3, ...
     sed_mine = mathieu_se_deriv(m, q, v)';
-    plot(v,sed_mine)
-    leg = [leg,['my ',num2str(m)]];    
-    hold on
-    plot(v,sed_gold)
-    leg = [leg,['gv ',num2str(m)]];
-
+    %plot(v,sed_mine,'b-')
+    %leg = [leg,['my ',num2str(m)]];    
+    %hold on
+    %plot(v,sed_gold,'r.')
+    %leg = [leg,['gv ',num2str(m)]];
+    %title('my sed')
+    %pause()
+    %close all;
+    
     diff(:,i-1) = sed_gold - sed_mine;
 
   end
-  legend(leg)
-  title('my sed')
   
   for i=1:size(diff,2)
-    ndiff = norm(diff(:,i))/size(diff,2);
+    ndiff = norm(diff(:,i))/length(v);
     % fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
     if (ndiff > tol)
       fprintf('Failure for order = %d, tol = %e, relnormdiff = %e\n', i-1, tol, ndiff)
+      figure(1)
+      plot(v,sed_mine,'b-')
+      hold on
+      plot(v,sed_gold,'r.')
+      legend('mine','gold')
+      title('sed')
+      %figure(2)
+      %plot(v,sed_mine-sed_gold)
+      %title('diff')
+      %pause()
+      close all;
     end
   end
   

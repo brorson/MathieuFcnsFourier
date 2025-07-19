@@ -48,7 +48,7 @@ function test_mathieu_ce_deriv_gvs(varargin)
   %title('my ced')
   
   for i=1:size(diff,2)
-    ndiff = norm(diff(:,i))/size(diff,2);
+    ndiff = norm(diff(:,i))/length(v);
     % fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
     if (ndiff > tol)
       fprintf('Failure for order = %d, tol = %e, relnormdiff = %e\n', i-1, tol, ndiff)
