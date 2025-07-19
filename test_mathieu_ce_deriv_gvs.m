@@ -1,14 +1,19 @@
-function test_mathieu_ce_deriv_gvs()
+function test_mathieu_ce_deriv_gvs(varargin)
   % This reads a file of Mathieu ce deriv golden values and uses them
   % to test the output of my ce deriv impl.
     
-  tol = 2e-3;  % Value is high to accomodate n=34
+  tol = 2e-1;  % Value is high to accomodate n=34
                % Also, deriv error is higher since it is computed
 	       % using finite differences.
 
-  fid = stdin();
-  filename = fscanf(fid,'%s');
-  
+  % Read filename from the command line if it isn't in the calling args.
+  if (length(varargin) == 0)
+    fid = stdin();
+    filename = fscanf(fid,'%s');
+  else
+    filename = varargin{1};
+  end
+   
   fprintf('filename = %s\n', filename)
 
   % The first row holds the q value

@@ -1,11 +1,16 @@
-function test_mathieu_ce_gvs()
+function test_mathieu_ce_gvs(varargin)
   % This reads a file of Mathieu ce golden values and uses them
   % to test the output of my ce impl.
 
   tol = 2e-5;  % Value is high to accomodate n=34
 
-  fid = stdin();
-  filename = fscanf(fid,'%s');
+  % Read filename from the command line if it isn't in the calling args.
+  if (length(varargin) == 0)
+    fid = stdin();
+    filename = fscanf(fid,'%s');
+  else
+    filename = varargin{1};
+  end
   
   fprintf('filename = %s\n', filename)
 

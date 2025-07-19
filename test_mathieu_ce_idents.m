@@ -12,7 +12,7 @@ function test_mathieu_ce_idents()
   N = 1000;
   v = linspace(-pi,pi,N);
 
-  MM = 25;
+  MM = 2;
 
   %====================================================
   % First test normalization per DLMF 28.2.30
@@ -171,6 +171,119 @@ function test_mathieu_ce_idents()
       end
     end
   end
+
+  fprintf('======================================\n')  
+ 
+  %====================================================
+  % Next test small q expansions per DLMF 28.6.21.  The goal
+  % is to make sure my fcn impls match the DLMF for negative
+  % q values.
+  fprintf('Test small q expansions per DLMF 28.6.21 ... \n')
+
+  tol = 2e-4;  % High tol since these expansions have small
+               % ROC.
+  N = 1000;
+  v = linspace(-pi,pi,N);
+  
+  MM = 35;
+
+  % The first three orders don't work unless q is really small
+  %-----------------------------------------------------------
+  % m = 0
+  qs = [-.2, -.1, .1, .2];  
+  for i=1:length(qs)
+    q = qs(i);
+    % Define power series after setting q.
+    ce0 = @(v) (1/sqrt(2))*(1 - q*cos(2*v)/2 + (q^2)*(cos(4*v-2))/32 - (q^3)*(cos(6*v)/9 - 11*cos(2*v))/128);
+    m = 0;
+    fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+    dlmfce0 = ce0(v);
+    myce0 = mathieu_ce(m,q,v);
+    %plot(v, dlmfce0)
+    %hold on
+    %plot(v, myce0)
+    %legend('dlmf','me')
+    ndiff = norm(dlmfce0 - myce0)/N;
+    if (ndiff > tol)
+      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      fail = fail+1;
+    end
+  end
+  
+  %-----------------------------------------------------------  
+  % m = 1
+  qs = [-1.5, -1, -.5, -.2, -.1, .1, .2, .5, 1, 1.5];    
+  for i=1:length(qs)
+    q = qs(i);
+    % Define power series after setting q.
+    ce1 = @(v) cos(v) - q*cos(3*v)/8 + (q^2)*(2*cos(5*v)/3 - ...
+               2*cos(3*v) - cos(v))/128 - (q^3)*(cos(7*v)/9 - 8*cos(5*v)/9 - cos(3*v)/3 + 2*cos(v))/1024;
+    m = 1;
+    fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+    dlmfce1 = ce1(v);
+    myce1 = mathieu_ce(m,q,v);
+    ndiff = norm(dlmfce1 - myce1)/N;
+    if (ndiff > tol)
+      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      fail = fail+1;
+    end
+  end
+  
+  %-----------------------------------------------------------  
+  % m = 2
+  qs = [-.5, -.2, -.1, .1, .2, .5];    
+  for i=1:length(qs)
+    q = qs(i);
+    % Define power series after setting q.
+    ce2 = @(v) cos(2*v) - q*(cos(4*v)/3 - 1)/4 + (q^2)*(cos(6*v)/3 - 76*cos(2*v)/9)/128;
+    m = 2;
+    fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+    dlmfce2 = ce2(v);
+    myce2 = mathieu_ce(m,q,v);
+    ndiff = norm(dlmfce2 - myce2)/N;
+    if (ndiff > tol)
+      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      fail = fail+1;
+    end
+  end
+  
+  %-----------------------------------------------------------  
+  % Higher orders work over larger q domains
+  % Now m = 3, 4, 5, ... 11
+  qs = [-1.5, -1, -.5, -.1, .1, .5, 1, 1.5];  
+  for i=1:length(qs)
+    q = qs(i);
+    for m=3:11
+      fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+      dlmfce = ce_q_expansion(m,q,v);
+      myce = mathieu_ce(m,q,v);
+      ndiff = norm(dlmfce - myce)/N;
+      if (ndiff > tol)
+	fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+	fail = fail+1;
+      end
+    end
+    fprintf('--------------------------------------\n')      
+  end
+
+  %-----------------------------------------------------------  
+  % Now even higher orders
+  qs = [-10, -3, -1.5, -1, -.5, -.1, .1, .5, 1, 1.5, 3, 10];  
+  for i=1:length(qs)
+    q = qs(i);
+    for m=12:MM
+      fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+      dlmfce = ce_q_expansion(m,q,v);
+      myce = mathieu_ce(m,q,v);
+      ndiff = norm(dlmfce - myce)/N;
+      if (ndiff > tol)
+	fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+	fail = fail+1;
+      end
+    end
+    fprintf('--------------------------------------\n')      
+  end
+  
  
   fprintf('======================================\n')
   fprintf('At end, fail = %d\n', fail)

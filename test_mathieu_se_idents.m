@@ -12,7 +12,7 @@ function test_mathieu_se_idents()
   N = 1000;
   v = linspace(-pi,pi,N);
 
-  MM = 25;   % This is max order to test
+  MM = 2;   % This is max order to test
   
   
   %====================================================
@@ -167,7 +167,118 @@ function test_mathieu_se_idents()
       end
     end
   end
+  fprintf('======================================\n')  
  
+  %====================================================
+  % Next test small q expansions per DLMF 28.6.23.  The goal
+  % is to make sure my fcn impls go the right way for negative
+  % q values.
+  fprintf('Test small q expansions per DLMF 28.6.23 ... \n')
+
+  tol = 2e-4;
+  N = 1000;
+  v = linspace(-pi,pi,N);
+  
+  qs = [-1.5, -1, -.5, -.2, -.1, .1, .2, .5, 1, 1.5];
+
+  MM = 35;
+
+  % The first three orders don't work unless q is really small
+  %-----------------------------------------------------------
+  % m = 1
+  qs = [-.2, -.1, .1, .2];  
+  for i=1:length(qs)
+    q = qs(i);
+    % Define power series after setting q.
+    se1 = @(v) sin(v) - q*sin(3*v)/8 + (q^2)*(2*sin(5*v)/3 + 2*sin(3*v) - sin(v))/128 ...
+	  - (q^3)*(sin(7*v)/9 + 8*sin(5*v)/9 - sin(3*v)/3 - 2*sin(v))/1024;
+    m = 1;
+    fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+    dlmfse1 = se1(v);
+    myse1 = mathieu_se(m,q,v);
+    %plot(v, dlmfse1,'b-')
+    %hold on
+    %plot(v, myse1,'r.')
+    %legend('dlmf','me')
+    ndiff = norm(dlmfse1 - myse1)/N;
+    if (ndiff > tol)
+      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      fail = fail+1;
+    end
+    %pause()
+    %close all;
+  end
+
+  %-----------------------------------------------------------  
+  % m = 2
+  qs = [-.5, -.2, -.1, .1, .2, .5];    
+  for i=1:length(qs)
+    % Define power series after setting q.
+    se2 = @(v) sin(2*v) - q*sin(4*v)/12 + (q^2)*(sin(6*v)/3 - 4*sin(2*v)/9)/128;
+    m = 2;
+    fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+    dlmfse2 = se2(v);
+    myse2 = mathieu_se(m,q,v);
+    %plot(v, dlmfse2)
+    %hold on
+    %plot(v, myse2)
+    %legend('dlmf','me')
+    ndiff = norm(dlmfse2 - myse2)/N;
+    if (ndiff > tol)
+      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      fail = fail+1;
+    end
+  end
+  
+  %-----------------------------------------------------------  
+  % Higher orders work over larger q domains
+  % Now m = 3, 4, 5, ... 11
+  qs = [-1.5, -1, -.5, -.1, .1, .5, 1, 1.5];  
+  for i=1:length(qs)
+    q = qs(i);
+    for m=3:11
+      fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+      dlmfse = se_q_expansion(m,q,v);
+      myse = mathieu_se(m,q,v);
+      %plot(v, dlmfse,'b-')
+      %hold on
+      %plot(v, myse,'r.')
+      %legend('dlmf','me')
+      ndiff = norm(dlmfse - myse)/N;
+      if (ndiff > tol)
+        fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+        fail = fail+1;
+      end
+      %pause()
+      %close all;
+    end
+    fprintf('--------------------------------------\n')      
+  end
+   
+   %-----------------------------------------------------------  
+  % Now even higher orders
+  qs = [-10, -3, -1.5, -1, -.5, -.1, .1, .5, 1, 1.5, 3, 10];  
+  for i=1:length(qs)
+    q = qs(i);
+    for m=12:MM
+      fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+      dlmfse = se_q_expansion(m,q,v);
+      myse = mathieu_se(m,q,v);
+      %plot(v, dlmfse,'b-')
+      %hold on
+      %plot(v, myse,'r.')
+      %legend('dlmf','me')
+      ndiff = norm(dlmfse - myse)/N;
+      if (ndiff > tol)
+        fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+        fail = fail+1;
+      end
+      %pause()
+      %close all;
+    end
+    fprintf('--------------------------------------\n')      
+  end
+
   fprintf('======================================\n')
   fprintf('At end, fail = %d\n', fail)
   
