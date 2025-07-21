@@ -1,7 +1,7 @@
 function plot_mathieu_ce()
   % This plots the Mathieu ce fcns.
     
-  q = 100;
+  q = 1;
   
   fprintf('Plotting Fourier series ce for q = %f\n', q)
   
@@ -10,7 +10,7 @@ function plot_mathieu_ce()
   % First do even ce fcns
   leg = {};
   figure(1)
-  for m = 0:2:0
+  for m = 0:2:4
     %fprintf('-----------------------\n')    
     y = mathieu_ce(m,q,v);
     plot(v,y)
@@ -24,7 +24,7 @@ function plot_mathieu_ce()
   % Next do odd ce fcns
   leg = {};
   figure(2)
-  for m = 1:2:1
+  for m = 1:2:5
     %fprintf('-----------------------\n')
     y = mathieu_ce(m,q,v);
     plot(v,y)

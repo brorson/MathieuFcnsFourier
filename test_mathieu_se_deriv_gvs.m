@@ -32,7 +32,9 @@ function test_mathieu_se_deriv_gvs(varargin)
   
   % The remaining cols hold Mathiue se deriv values for
   % m = 1, 2, ...
-  leg = {};
+
+  % First create table of differences
+  %leg = {};
   for i=2:4 % size(M,2)
     sed_gold = M(:,i);
     m = i-1;  % 1, 2, 3, ...
@@ -50,6 +52,7 @@ function test_mathieu_se_deriv_gvs(varargin)
 
   end
   
+  % Now look through table for differences which are too large.
   for i=1:size(diff,2)
     ndiff = norm(diff(:,i))/length(v);
     % fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)

@@ -8,8 +8,8 @@ fns=( $(ls *.csv | grep ce_gvs) )
 
 for fn in ${fns[@]}
 do
-echo "Running tests using filename" $fn
-echo $fn | octave test_mathieu_ce_gvs.m
+echo "Running tests using filename" "$fn"
+echo "$fn" | octave test_mathieu_ce_gvs.m
 done
 echo ==========================================
 
@@ -20,10 +20,11 @@ fns=( $(ls *.csv | grep se_gvs) )
 
 for fn in ${fns[@]}
 do
-echo "Running tests using filename" $fn
-echo $fn | octave test_mathieu_se_gvs.m
+echo "Running tests using filename" "$fn"
+echo "$fn" | octave test_mathieu_se_gvs.m
 done
 echo ==========================================
+
 
 #------------------------------------------------
 # Mathieu ce deriv
@@ -31,8 +32,8 @@ fns=( $(ls *.csv | grep ce_deriv_gvs) )
 
 for fn in ${fns[@]}
 do
-echo "Running tests using filename" $fn
-echo $fn | octave test_mathieu_ce_deriv_gvs.m
+echo "Running tests using filename" "$fn"
+echo "$fn" | octave test_mathieu_ce_deriv_gvs.m
 done
 echo ==========================================
 
@@ -42,8 +43,8 @@ fns=( $(ls *.csv | grep se_deriv_gvs) )
 
 for fn in ${fns[@]}
 do
-echo "Running tests using filename" $fn
-echo $fn | octave test_mathieu_se_deriv_gvs.m
+echo "Running tests using filename" "$fn"
+echo "$fn" | octave test_mathieu_se_deriv_gvs.m
 done
 echo ==========================================
 

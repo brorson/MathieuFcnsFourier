@@ -31,6 +31,8 @@ function test_mathieu_ce_deriv_gvs(varargin)
   
   % The remaining cols hold Mathiue ce values for
   % m = 0, 1, 2, ...
+
+  % Create table of differences.
   %leg = {};
   for i=2:size(M,2)
     ced_gold = M(:,i);
@@ -47,6 +49,7 @@ function test_mathieu_ce_deriv_gvs(varargin)
   %legend(leg)
   %title('my ced')
   
+  % Now look through table for differences which are too large.
   for i=1:size(diff,2)
     ndiff = norm(diff(:,i))/length(v);
     % fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)

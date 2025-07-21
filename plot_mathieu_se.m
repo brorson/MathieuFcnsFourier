@@ -8,7 +8,7 @@ function plot_mathieu_se()
   % First do even se fcns
   leg = {};
   figure(1)
-  for m = 2:2:0
+  for m = 2:2:6
     %fprintf('-----------------------\n')    
     y = mathieu_se(m,q,v);
     plot(v,y)
@@ -22,7 +22,7 @@ function plot_mathieu_se()
   % Next do odd se fcns
   leg = {};
   figure(2)
-  for m = 1:2:1
+  for m = 1:2:5
     %fprintf('-----------------------\n')
     y = mathieu_se(m,q,v);
     plot(v,y)

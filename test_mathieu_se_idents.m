@@ -1,7 +1,6 @@
 function test_mathieu_se_idents()
   % This checks se using a few identities.
     
-  tol = 1e-12;
   fail = 0;
     
   qs = logspace(-3,3,21);
@@ -12,13 +11,14 @@ function test_mathieu_se_idents()
   N = 1000;
   v = linspace(-pi,pi,N);
 
-  MM = 2;   % This is max order to test
+  MM = 10;   % This is max order to test -- usually 35
   
   
   %====================================================
   % First test normalization per DLMF 28.2.30
   fprintf('Testing normalization DLMF 28.2.30 ... \n')
   %MM = 10;   % This is max order to test
+  tol = 1e-13;
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     for i = 1:length(qs)
@@ -71,7 +71,7 @@ function test_mathieu_se_idents()
   %====================================================
   % Test q = 0 case per DLMF 28.2.29
   fprintf('Test se tends to sin for q = -1e-13 ... \n')
-  tol = 1e-12;
+  tol = 5e-13;
   q = -1e-13;
   %MM = 10;  % Max order to test
   for m=1:MM
@@ -124,7 +124,7 @@ function test_mathieu_se_idents()
   %====================================================
   % Next test even fcns per DLMF 28.2,34
   fprintf('Test rotation identity for even fcns per DLMF 28.2,34 ... \n')
-  tol = 1e-12;
+  tol = 1e-13;
   v = 0.05;  % Just check one random point.
   %MM = 10;  % Sets max order to test
   for m=2:2:MM
@@ -175,7 +175,7 @@ function test_mathieu_se_idents()
   % q values.
   fprintf('Test small q expansions per DLMF 28.6.23 ... \n')
 
-  tol = 2e-4;
+  tol = 1e-4;
   N = 1000;
   v = linspace(-pi,pi,N);
   

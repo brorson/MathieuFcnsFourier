@@ -2,7 +2,7 @@ function test_mathieu_ce_gvs(varargin)
   % This reads a file of Mathieu ce golden values and uses them
   % to test the output of my ce impl.
 
-  tol = 2e-5;  % Value is high to accomodate n=34
+  tol = 2e-6;  % Value is high to accomodate n=34
 
   % Read filename from the command line if it isn't in the calling args.
   if (length(varargin) == 0)

@@ -2,7 +2,7 @@ function test_mathieu_se_gvs(varargin)
   % This reads a file of Mathieu se golden values and uses them
   % to test the output of my se impl.
     
-  tol = 2e-5;  % Value is high to accomodate n=34
+  tol = 2e-6;  % Value is high to accomodate n=34
 
   % Read filename from the command line if it isn't in the calling args.
   if (length(varargin) == 0)
@@ -53,6 +53,17 @@ function test_mathieu_se_gvs(varargin)
     %fprintf('Order = %d, relnormdiff = %e\n', i, ndiff)
     if (ndiff > tol)
       fprintf('Failure for order = %d, tol = %e, relnormdiff = %e\n', i-1, tol, ndiff)
+      figure(1)
+      plot(v,se_mine,'b-')
+      hold on
+      plot(v,se_gold,'r.')
+      legend('mine','gold')
+      title('se')
+      %figure(2)
+      %plot(v,se_mine-se_gold)
+      %title('diff')
+      %pause()
+      close all;
     end
 
   end

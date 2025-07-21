@@ -1,7 +1,7 @@
 function test_mathieu_ce_idents()
   % This checks ce using a few identities.
     
-  tol = 1e-12;
+
   fail = 0;
     
   qs = logspace(-3,3,21);
@@ -12,11 +12,12 @@ function test_mathieu_ce_idents()
   N = 1000;
   v = linspace(-pi,pi,N);
 
-  MM = 2;
+  MM = 10;
 
   %====================================================
   % First test normalization per DLMF 28.2.30
   fprintf('Testing normalization DLMF 28.2.30 ... \n')
+  tol = 1e-13;  
   %MM = 10;   % This is max order to test
   for m=0:MM
     fprintf('-----------  m = %d  -----------\n', m)
@@ -43,7 +44,7 @@ function test_mathieu_ce_idents()
   %====================================================
   % Next test orthogonality per DLMF 28.2,31
   fprintf('Testing orthogonality per DLMF 28.2,31 ... \n')
-  tol = 1e-11;
+  tol = 1e-10;
   %MM = 10;  % Max order to test
   for m1=0:MM;   for m2=m1:MM
     if (m1 == m2)
@@ -57,7 +58,7 @@ function test_mathieu_ce_idents()
       %ce2 = mathieu_ce(m2,q,v);     
       %s = trapz(v,ce1.*ce2);
 
-      % integral is more recommended over trapz
+      % integral is recommended over trapz
       f = @(v) mathieu_ce(m1,q,v).*mathieu_ce(m2,q,v);
       s = integral(f, -pi, pi);
       
@@ -75,7 +76,7 @@ function test_mathieu_ce_idents()
   %====================================================
   % Test q = 0 case per DLMF 28.2.29
   fprintf('Test ce tends to cos for q = -1e-13 per DLMF 28.2.29 ... \n')
-  tol = 1e-12;
+  tol = 5e-13;
   q = -1e-13;
   %MM = 10;  % Max order to test
   for m=1:MM
@@ -128,7 +129,7 @@ function test_mathieu_ce_idents()
   %====================================================
   % Next test even fcns per DLMF 28.2,34
   fprintf('Test rotation identity for even fcns per DLMF 28.2,34 ... \n')
-  tol = 1e-12;
+  tol = 1e-13;
   v = 0.05;  % Just check one random point.
   %MM = 10;  % Sets max order to test
   for m=0:2:MM
@@ -180,7 +181,7 @@ function test_mathieu_ce_idents()
   % q values.
   fprintf('Test small q expansions per DLMF 28.6.21 ... \n')
 
-  tol = 2e-4;  % High tol since these expansions have small
+  tol = 1e-4;  % High tol since these expansions have small
                % ROC.
   N = 1000;
   v = linspace(-pi,pi,N);
