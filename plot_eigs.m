@@ -3,13 +3,13 @@ function plot_eigs()
   % on https://dlmf.nist.gov/28.2
   
   % Number of sample points
-  N = 500;
+  N = 1000;
   
   % Domain of q values to examine (for plotting)
-  qs = linspace(0,50,N)';
+  qs = linspace(-30,30,N)';
   
   % Number of each type of eigenvalue to track
-  Ne = 9;  % Ne of a and Ne of b
+  Ne = 8;  % Ne of a and Ne of b
 
 
   %---------------------------------------------
@@ -37,8 +37,13 @@ function plot_eigs()
   c = {};
   for j=1:Ne
     hold on
-    plot(qs,as(:,j),'b-','LineWidth',2)
-    c = [c, ['a',num2str(j-1)]];
+    if (j==1)
+      h1 = plot(qs,as(:,j),'b-','LineWidth',2);
+      c = [c, ['a',num2str(j-1)]];
+    else
+      c = [c, ''];
+      plot(qs,as(:,j),'b-','LineWidth',2);
+    end
   end
 
 
@@ -66,18 +71,26 @@ function plot_eigs()
   %figure(1)
   for j=1:Ne
     hold on
-    plot(qs,bs(:,j),'r--','LineWidth',2)
-    c = [c, ['b',num2str(j)]];
+    if (j==1)
+      c = [c, ['b',num2str(j)]];
+      h2 = plot(qs,bs(:,j),'r--','LineWidth',2);
+    else
+      c = [c, ''];
+      plot(qs,bs(:,j),'r--','LineWidth',2);
+    end
   end
   
   % Turn these on to reproduce the DLMF plot
   %xlim([0,10]);
   %ylim([-5,20]);
   
+
+
   title('First Mathieu eigenvalues vs. q')
   xlabel('q')
   ylabel('eigenvalue')
-  %legend(c)
-
+  %legend([1,Ne+1],'ce eigs','se eigs')
+  ylim([-50,90])
+  legend([h1,h2],'ce eigs','se eigs','Location','North')
   
 end

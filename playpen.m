@@ -56,34 +56,34 @@ end
 
 if 0
   % This is a test that the eigenvalue is a constant.
-  fprintf('Testing modce1 to verify eigenvalue is const\n')
+  fprintf('Testing modmc1 to verify eigenvalue is const\n')
 
   m = 25;
   q = 1;
   u = linspace(0,10,50000);
   du = u(2)-u(1);
 
-  D2R = (mathieu_modce1(m,q,u(3:end))-2*mathieu_modce1(m,q,u(2:end-1))+mathieu_modce1(m,q,u(1:end-2)))/(du*du);
-  R = mathieu_modce1(m,q,u(2:end-1));
+  D2R = (mathieu_modmc1(m,q,u(3:end))-2*mathieu_modmc1(m,q,u(2:end-1))+mathieu_modmc1(m,q,u(1:end-2)))/(du*du);
+  R = mathieu_modmc1(m,q,u(2:end-1));
 
   figure(100)
   plot(u(2:end-1), D2R)
-  title('2nd deriv of modce1')
+  title('2nd deriv of modmc1')
   
   figure(101)
   plot(u(2:end-1), R)
-  title('modce1')
+  title('modmc1')
   
   a = D2R./R + 2*q*cosh(2*u(2:end-1));
   fprintf('Minmax = %e\n', max(a)-min(a))
 
   figure(3)
   semilogy(u(2:end-1), abs(a))
-  title('modce1 -- Eigenvalue a (semilogy)')
+  title('modmc1 -- Eigenvalue a (semilogy)')
 
   figure(4)
   plot(u(2:end-1), a)
-  title('modce1 -- Eigenvalue a (plot)')
+  title('modmc1 -- Eigenvalue a (plot)')
 
 end
 

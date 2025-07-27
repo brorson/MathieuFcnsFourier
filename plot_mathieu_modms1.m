@@ -1,5 +1,5 @@
-function plot_mathieu_modse1()
-  % This plots the modified Mathieu Se fcns of first kind.
+function plot_mathieu_modms1()
+  % This plots the modified Mathieu Ms fcns of first kind.
     
   q = 1;
 
@@ -7,31 +7,31 @@ function plot_mathieu_modse1()
 
   leg = {};
   
-  % First do even Se fcns
+  % First do even Ms fcns
   figure(1)
   for m = 2:2:8
     %fprintf('-----------------------\n')    
-    y = mathieu_modse1(m,q,v);
+    y = mathieu_modms1(m,q,v);
     plot(v,y)
     hold on
     ss = ['m = ',num2str(m)];
     leg = [leg, ss];
   end  
-  title('Modified Mathieu of first kind Se2n')
+  title('Modified Mathieu of first kind Ms2n')
   legend(leg)
   
   leg = {};
-  % Next do odd Se fcns
+  % Next do odd Ms fcns
   figure(2)
   for m = 1:2:7
     %fprintf('-----------------------\n')
-    y = mathieu_modse1(m,q,v);
+    y = mathieu_modms1(m,q,v);
     plot(v,y)
     hold on
     ss = ['m = ',num2str(m)];
     leg = [leg, ss];
   end  
-  title('Modified Mathieu of first kind Se2n+1')
+  title('Modified Mathieu of first kind Ms2n+1')
   legend(leg)
 
   %==============================================
@@ -44,11 +44,11 @@ function plot_mathieu_modse1()
     % I change sign to match the Guitarrez paper.
     % That said, I don't know what normalization they used,
     % so my plot doesn't exactly match theirs.
-    y = -mathieu_modse1(m,q,u);
+    y = -mathieu_modms1(m,q,u);
     plot(u,y)
     hold on
   end
-  title('modse1 for varying q per Guitarrez')
+  title('modms1 for varying q per Guitarrez')
   
   %==============================================
   % Compare against besselj for large u per
@@ -59,7 +59,7 @@ function plot_mathieu_modse1()
   u = linspace(0,5,N);
   q = 1;
   yj = besselj(m,2*sqrt(q)*cosh(u));
-  ym = mathieu_modse1(m,q,u);
+  ym = mathieu_modms1(m,q,u);
   % I need to change sign to match the Bessel fcn.
   if (sign(ym(end)) ~= sign(yj(end)))
     ym = -ym;
@@ -68,8 +68,8 @@ function plot_mathieu_modse1()
   plot(u,yj)
   hold on
   plot(u,ym)
-  title('asymptotic behavior: modse1 compared to besselj')
-  legend('Besselj','Mathieu modse1')
+  title('asymptotic behavior: modms1 compared to besselj')
+  legend('Besselj','Mathieu modms1')
   
   figure(5)
   diff = ym-yj;

@@ -19,7 +19,9 @@ function A = mathieu_coeffs_ee(N,q,m)
   % V matrix.
   [D,idx] = sort(diag(D));
   V = V(:,idx);
-    
+
+  %fprintf('D(1) = %f, D(2) = %f\n', D(1), D(2))  
+  
   % Undo change to matrix made in make_matrix_ee
   V(1,:) = V(1,:)/sqrt(2);
 

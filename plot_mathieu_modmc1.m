@@ -1,5 +1,5 @@
-function plot_mathieu_modce1()
-  % This plots the modified Mathieu Ce fcns of first kind.
+function plot_mathieu_modmc1()
+  % This plots the modified Mathieu Mc fcns of first kind.
     
   q = 1;
 
@@ -11,13 +11,13 @@ function plot_mathieu_modce1()
   figure(1)
   for m = 0:2:6
     %fprintf('-----------------------\n')    
-    y = mathieu_modce1(m,q,v);
+    y = mathieu_modmc1(m,q,v);
     plot(v,y)
     hold on
     ss = ['m = ',num2str(m)];
     leg = [leg, ss];
   end  
-  title('Modified Mathieu of first kind Ce2n')
+  title('Modified Mathieu of first kind Mc2n')
   legend(leg,'Location','SouthEast')
 
   leg = {};
@@ -25,13 +25,13 @@ function plot_mathieu_modce1()
   figure(2)
   for m = 1:2:7
     %fprintf('-----------------------\n')
-    y = mathieu_modce1(m,q,v);
+    y = mathieu_modmc1(m,q,v);
     plot(v,y)
     hold on
     ss = ['m = ',num2str(m)];
     leg = [leg, ss];
   end  
-  title('Modified Mathieu of first kind Ce2n+1')
+  title('Modified Mathieu of first kind Mc2n+1')
   legend(leg, 'Location','SouthEast')
 
   %==============================================
@@ -42,11 +42,11 @@ function plot_mathieu_modce1()
   u = linspace(0,2.5,100);
   for q = 1:3
     % I change sign to match the Guitarrez paper 
-    y = -mathieu_modce1(m,q,u);
+    y = -mathieu_modmc1(m,q,u);
     plot(u,y)
     hold on
   end
-  title('modce1 for varying q per Guitarrez')
+  title('modmc1 for varying q per Guitarrez')
 
   %==============================================
   % Compare against besselj for large u per
@@ -57,7 +57,7 @@ function plot_mathieu_modce1()
   u = linspace(0,5,N);
   q = 1;
   yj = besselj(m,2*sqrt(q)*cosh(u));
-  ym = mathieu_modce1(m,q,u);
+  ym = mathieu_modmc1(m,q,u);
   % I need to change sign to match the Bessel fcn.
   if (sign(ym(end)) ~= sign(yj(end)))
     ym = -ym;
@@ -66,8 +66,8 @@ function plot_mathieu_modce1()
   plot(u,yj)
   hold on
   plot(u,ym)
-  title('asymptotic behavior: modce1 compared to besselj')
-  legend('Besselj','Mathieu modce1')
+  title('asymptotic behavior: modmc1 compared to besselj')
+  legend('Besselj','Mathieu modmc1')
   
   figure(5)
   diff = ym-yj;
