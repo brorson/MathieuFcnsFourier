@@ -61,9 +61,9 @@ function plot_mathieu_modms1()
   yj = besselj(m,2*sqrt(q)*cosh(u));
   ym = mathieu_modms1(m,q,u);
   % I need to change sign to match the Bessel fcn.
-  if (sign(ym(end)) ~= sign(yj(end)))
-    ym = -ym;
-  end
+  %if (sign(ym(end)) ~= sign(yj(end)))
+  %  ym = -ym;
+  %end
   
   plot(u,yj)
   hold on
