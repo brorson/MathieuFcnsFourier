@@ -72,6 +72,44 @@ function test_mathieu_ce_idents()
       end
     end
   end; end
+
+   fprintf('======================================\n')
+  % Test Wronskian
+  fprintf('Testing W(ce_n,se_n) Wronskian per DLMF 28.20.21 ... \n')
+  tol = 1e-6;
+  v = linspace(0, 10, N)';
+  MM = 5;  % Wronskian test starts to fail for m=6.  Must fix impls.
+
+  % Test orders starting at m=0 for mc fcns.
+  for m=1:MM
+    fprintf('-----------  m = %d  -----------\n', m)
+    for i = 1:length(qs)
+      q = qs(i);
+      
+      [y1,y1d] = mathieu_ce(m,q,v);
+      [y2,y2d] = mathieu_se(m,q,v);
+
+      % Compute Wronskian
+      w = y1.*y2d - y1d.*y2;
+      
+     % Relative norm diff
+      wtrue = 1;
+      relndiff = norm(w-wtrue)/N;
+      fprintf('m = %d, q = %f, relndiff = %e ... ', m, q, relndiff)
+      if (abs(relndiff) > tol)
+        fprintf('Error!\n')
+        fail = fail+1;
+        plot(v,w)
+        title('Wronskian')
+        pause()
+        close all; 
+      else
+        fprintf('\n')
+        pass = pass+1;
+      end
+    end
+  end
+
   
   fprintf('======================================\n')
   

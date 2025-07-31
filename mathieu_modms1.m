@@ -7,8 +7,12 @@ function [Ms,Msd] = mathieu_modms1(m, q, u)
     
   % Here I use the expression given in Zhang and Jin.
 
- if (q<0)
+  if (q<0)
     error('Modified Mathieu fcns for negatative q not implemented yet!\n')
+  end
+
+  if (m<1)
+    error('Invalid order m requested for Ms1!\n')
   end
 
   % Force v to be col vector so returns are col vectors.

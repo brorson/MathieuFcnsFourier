@@ -7,6 +7,20 @@ function [Ms,Msd] = mathieu_modms2(m, q, u)
     
   % Here I use the expression given in Zhang and Jin.
 
+  if (q<0)
+    error('Modified Mathieu fcns for negatative q not implemented yet!\n')
+  end
+
+  if (m<1)
+    error('Invalid order m requested for Ms2!\n')
+  end
+
+  % Force v to be col vector so returns are col vectors.
+  if (size(u, 2)>1)
+    u = u';
+  end
+
+    
   % I find the peak Fourier coeff tracks m.  Therefore
   % I adjust the matrix size based on order m.
   N = m+10;
