@@ -1,4 +1,4 @@
-function Mc = mathieu_modmc2(m, q, u)
+function [Mc,Mcd] = mathieu_modmc2(m, q, u)
   % This computes the modified Mathieu fcn of the 
   % second kind of order m for frequency
   % parameter q and radius u.  This is the fcn frequently
@@ -21,44 +21,51 @@ function Mc = mathieu_modmc2(m, q, u)
   tol = 1e-14;
   if (abs(mod(m,2) < tol))
     % Even
-    fprintf('Even Mathieu Mc, m = %d\n', m)
+    %fprintf('Even Mathieu Mc(2), m = %d\n', m)
     A = mathieu_coeffs_ee(N,q,m);
     Mc = 0;
+    Mcd = 0;
     for k=(N-1):-1:0
       Jks = besselj(k,s);
       Ykt = bessely(k,t);
+      Jdks = besseljd(k,s);
+      Ydkt = besselyd(k,t);
+
       Mc = Mc + ((-1)^k)*A(k+1)*Jks.*Ykt ;
+      Mcd = Mcd + ((-1)^k)*A(k+1)*(exp(u).*Jks.*Ydkt - exp(-u).*Jdks.*Ykt) ;
     end
     % Do normalization.
     sgn = m/2;
-    Mc = (((-1)^sgn)/A(1))*Mc;    
+    Mc = (((-1)^sgn)/A(1))*Mc;
+    Mcd = sqrt(q)*(((-1)^sgn)/A(1))*Mcd;
   else
     % Odd
-    fprintf('Odd Mathieu Mc, m = %d\n', m)
+    %fprintf('Odd Mathieu Mc(2), m = %d\n', m)
     A = mathieu_coeffs_eo(N,q,m);
     Mc = 0;
+    Mcd = 0;
     for k=(N-1):-1:0
       Jks = besselj(k,s);
       Ykt = bessely(k,t);
       Jkp1s = besselj(k+1,s);
       Ykp1t = bessely(k+1,t);
+
+      Jdks = besseljd(k,s);
+      Ydkt = besselyd(k,t);
+      Jdkp1s = besseljd(k+1,s);
+      Ydkp1t = besselyd(k+1,t);
+
       Mc = Mc + ((-1)^k)*A(k+1)*(Jks.*Ykp1t + Jkp1s.*Ykt);
+      Mcd = Mcd + ((-1)^k)*A(k+1)* ...
+            (exp(u).*(Jks.*Ydkp1t + Jkp1s.*Ydkt) - ...
+             exp(-u).*(Jdks.*Ykp1t + Jdkp1s.*Ykt) ) ;
+
     end
     % Do normalization.
     sgn = (m-1)/2;
     Mc = (((-1)^sgn)/A(1))*Mc;    
+    Mcd = sqrt(q)*(((-1)^sgn)/A(1))*Mcd;
   end
-
-  % By defintion, all fcns are positive for u = 0.  Modify fcn
-  % to obey this definition.
-  %[~, zidx] = min(abs(u));
-  %if (Mc(zidx)<0)
-  %  Mc = -Mc;
-  %end
-  %[~,k] = max(abs(A));
-  %if (A(k)*((-1)^(k-1)) < 0)
-  %  %Mc = -Mc;
-  %end
 
   % At this point, fcns should be properly normalized.
   
