@@ -42,7 +42,7 @@ function plot_wronskian_err()
   end
 
   figure(1)
-  contourf(X,Y,errs,'ShowText','on')
+  contourf(X,Y,errs,-20:5:35,'ShowText','on')
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- Mc1 Mc2')
@@ -81,7 +81,7 @@ function plot_wronskian_err()
   end
 
   figure(2)
-  contourf(X,Y,errs,'ShowText','on')
+  contourf(X,Y,errs,-20:5:35,'ShowText','on')
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- ms1 ms2')
@@ -120,7 +120,7 @@ function plot_wronskian_err()
   end
 
   figure(3)
-  contourf(X,Y,errs,'ShowText','on')
+  contourf(X,Y,errs,-20:5:35,'ShowText','on')
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- mc1 ms2')
