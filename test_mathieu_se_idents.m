@@ -9,7 +9,7 @@ function test_mathieu_se_idents()
   %qs = [1, 10];    
   
   N = 1000;
-  v = linspace(-pi,pi,N);
+  v = linspace(-pi,pi,N)';
 
   MM = 10;   % This is max order to test -- usually 35
   
@@ -54,7 +54,9 @@ function test_mathieu_se_idents()
       q = qs(i);
       
       % integral is more recommended over trapz
-      f = @(v) mathieu_se(m1,q,v).*mathieu_se(m2,q,v);
+      % For some reason, I need to transpose the output of mathieu_ce.      
+      se = @(m,q,v) mathieu_se(m,q,v)'; 
+      f = @(v) se(m1,q,v).*se(m2,q,v);
       s = integral(f, -pi, pi);
       
       diff = s;
@@ -177,7 +179,7 @@ function test_mathieu_se_idents()
 
   tol = 1e-4;
   N = 1000;
-  v = linspace(-pi,pi,N);
+  v = linspace(-pi,pi,N)';
   
   qs = [-1.5, -1, -.5, -.2, -.1, .1, .2, .5, 1, 1.5];
 

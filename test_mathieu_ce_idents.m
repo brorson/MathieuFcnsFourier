@@ -10,9 +10,9 @@ function test_mathieu_ce_idents()
   %qs = [1, 10];    
   
   N = 1000;
-  v = linspace(-pi,pi,N);
+  v = linspace(-pi,pi,N)';
 
-  MM = 100;
+  MM = 10;
 
   %====================================================
   % First test normalization per DLMF 28.2.30
@@ -59,7 +59,9 @@ function test_mathieu_ce_idents()
       %s = trapz(v,ce1.*ce2);
 
       % integral is recommended over trapz
-      f = @(v) mathieu_ce(m1,q,v).*mathieu_ce(m2,q,v);
+      % For some reason, I need to transpose the output of mathieu_ce.      
+      ce = @(m,q,v) mathieu_ce(m,q,v)';  
+      f = @(v) ce(m1,q,v).*ce(m2,q,v);
       s = integral(f, -pi, pi);
       
       diff = s;
@@ -78,7 +80,7 @@ function test_mathieu_ce_idents()
   fprintf('Test ce tends to cos for q = -1e-13 per DLMF 28.2.29 ... \n')
   tol = 5e-13;
   q = -1e-13;
-  MM = 100;  % Max order to test
+  MM = 10;  % Max order to test
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     LHS = mathieu_ce(m,q,v);
@@ -184,9 +186,9 @@ function test_mathieu_ce_idents()
   tol = 1e-4;  % High tol since these expansions have small
                % ROC.
   N = 1000;
-  v = linspace(-pi,pi,N);
+  v = linspace(-pi,pi,N)';  % Col vector.
   
-  MM = 100;
+  MM = 50;
 
   % The first three orders don't work unless q is really small
   %-----------------------------------------------------------

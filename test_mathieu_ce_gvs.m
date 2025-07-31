@@ -34,7 +34,7 @@ function test_mathieu_ce_gvs(varargin)
   for i=2:size(M,2)
     ce_gold = M(:,i);
     m = i-2;
-    ce_mine = mathieu_ce(m, q, v)';
+    ce_mine = mathieu_ce(m, q, v);  % mathieu_ce returns col vector
     %plot(v,ce_mine)
     %hold on
     %leg = [leg,num2str(m)];

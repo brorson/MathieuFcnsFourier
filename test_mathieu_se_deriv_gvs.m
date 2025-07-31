@@ -38,7 +38,7 @@ function test_mathieu_se_deriv_gvs(varargin)
   for i=2:4 % size(M,2)
     sed_gold = M(:,i);
     m = i-1;  % 1, 2, 3, ...
-    sed_mine = mathieu_se_deriv(m, q, v)';
+    [~,sed_mine] = mathieu_se(m, q, v);
     %plot(v,sed_mine,'b-')
     %leg = [leg,['my ',num2str(m)]];    
     %hold on

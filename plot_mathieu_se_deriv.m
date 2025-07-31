@@ -8,9 +8,9 @@ function plot_mathieu_se_deriv()
   % First do even se_deriv fcns
   leg = {};
   figure(1)
-  for m = 2:2:2
+  for m = 2:2:4
     %fprintf('-----------------------\n')    
-    y = mathieu_se_deriv(m,q,v);
+    [~,y] = mathieu_se(m,q,v);
     plot(v,y)
     hold on
     ss = ['m = ',num2str(m)];
@@ -22,9 +22,9 @@ function plot_mathieu_se_deriv()
   % Next do odd se fcns
   leg = {};
   figure(2)
-  for m = 1:2:1
+  for m = 1:2:3
     %fprintf('-----------------------\n')
-    y = mathieu_se_deriv(m,q,v);
+    [~,y] = mathieu_se(m,q,v);
     plot(v,y)
     hold on
     ss = ['m = ',num2str(m)];

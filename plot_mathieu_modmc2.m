@@ -3,7 +3,7 @@ function plot_mathieu_modmc2()
     
   q = 1;
 
-  v = linspace(0,5,5000);
+  v = linspace(0,5,5000)';
 
   leg = {};
   
@@ -42,7 +42,7 @@ function plot_mathieu_modmc2()
   figure(4)
   m=7;
   N = 10000;
-  u = linspace(0,5,N);
+  u = linspace(0,5,N)';
   q = 1;
   yy = bessely(m,2*sqrt(q)*cosh(u));
   ym = mathieu_modmc2(m,q,u);

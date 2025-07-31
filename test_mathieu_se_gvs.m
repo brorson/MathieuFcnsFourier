@@ -34,7 +34,7 @@ function test_mathieu_se_gvs(varargin)
   for i=2:size(M,2)
     se_gold = M(:,i);
     m = i-1;
-    se_mine = mathieu_se(m, q, v)';
+    se_mine = mathieu_se(m, q, v);  % mathieu_se returns col vec.
     %plot(v,se_mine,'-')
     %hold on
     %plot(v,se_gold,'.')

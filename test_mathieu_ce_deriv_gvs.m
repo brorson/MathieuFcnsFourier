@@ -37,7 +37,7 @@ function test_mathieu_ce_deriv_gvs(varargin)
   for i=2:size(M,2)
     ced_gold = M(:,i);
     m = i-2;
-    ced_mine = mathieu_ce_deriv(m, q, v)';
+    [~,ced_mine] = mathieu_ce(m, q, v);
     %plot(v,ced_mine)
     %leg = [leg,['my ',num2str(m)]];    
     %hold on
