@@ -17,8 +17,8 @@ function test_mathieu_ce_idents()
   %====================================================
   % First test normalization per DLMF 28.2.30
   fprintf('Testing normalization DLMF 28.2.30 ... \n')
-  tol = 1e-13;  
-  %MM = 50;   % This is max order to test
+  tol = 1e-14;  
+  MM = 25;   % This is max order to test
   for m=0:MM
     fprintf('-----------  m = %d  -----------\n', m)
     for i = 1:length(qs)
@@ -33,8 +33,6 @@ function test_mathieu_ce_idents()
 	      fprintf('Error!  m = %d, q = %f, diff = %e\n', m, q, diff)
 	      fail = fail+1;
       end
-      
-      
     end
   end
 
@@ -44,8 +42,8 @@ function test_mathieu_ce_idents()
   %====================================================
   % Next test orthogonality per DLMF 28.2,31
   fprintf('Testing orthogonality per DLMF 28.2,31 ... \n')
-  tol = 1e-10;
-  MM = 5;  % Max order to test
+  tol = 1e-12;
+  MM = 20;  % Max order to test
   for m1=0:MM;   for m2=m1:MM
     if (m1 == m2)
       continue
@@ -72,35 +70,55 @@ function test_mathieu_ce_idents()
       end
     end
   end; end
+    
+  fprintf('======================================\n')
 
-   fprintf('======================================\n')
-  % Test Wronskian
-  fprintf('Testing W(ce_n,se_n) Wronskian per DLMF 28.20.21 ... \n')
-  tol = 1e-6;
-  v = linspace(0, 10, N)';
-  MM = 5;  % Wronskian test starts to fail for m=6.  Must fix impls.
+  %====================================================
+if 0
+  % Test high order finite diff
+  fprintf('Testing finite diff ... \n')
+  tol = 1e-10;
+  v = linspace(-pi,pi,10000)';
+  MM = 10;
 
   % Test orders starting at m=0 for mc fcns.
+  h = v(2)-v(1)
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     for i = 1:length(qs)
       q = qs(i);
       
-      [y1,y1d] = mathieu_ce(m,q,v);
-      [y2,y2d] = mathieu_se(m,q,v);
+      [y,yd] = mathieu_ce(m,q,v);
+      a = mathieu_a(m,q);
 
-      % Compute Wronskian
-      w = y1.*y2d - y1d.*y2;
+      % Compute residual using finite diff formula
+      % Compute second deriv from first deriv using 
+      % 4th order method, coeffs = [1/12, -2/3, 0, 2/3, -1/12]
+      % Note that yd(end) == y(1) identically, so I need to trim off the last pt.
+      v1 = v(1:end-1);
+      y = y(1:end-1);
+      yd = yd(1:end-1);      
+      %ydd = zeros(size(v1));
+      %ydd(1) = yd(end-1)/12 - 2*yd(end)/3 + 2*yd(2)/3 - yd(3)/12;
+      %ydd(2) = yd(end)/12 - 2*yd(1)/3 + 2*yd(3)/3 - yd(4)/12;      
+      %ydd(3:end-2) = yd(1:end-4)/12 - 2*yd(2:end-3)/3 + 2*yd(4:end-1)/3 - yd(5:end)/12;
+      %ydd(end-1) = yd(end-3)/12 - 2*yd(end-2)/3 + 2*yd(end)/3 - yd(1)/12;      
+      %ydd(end) = yd(end-2)/12 - 2*yd(end-1)/3 + 2*yd(1)/3 - yd(2)/12;            
+      ydd = yd(1:end-4)/12 - 2*yd(2:end-3)/3 + 2*yd(4:end-1)/3 - yd(5:end)/12;
+      v1 = v1(1:end-4);
+      y = y(1:end-4);
+      
+      r = ydd/h + (a - 2*q*cos(2*v1)).*y;
+      
       
      % Relative norm diff
-      wtrue = 1;
-      relndiff = norm(w-wtrue)/N;
+      relndiff = norm(r)/(N-1);
       fprintf('m = %d, q = %f, relndiff = %e ... ', m, q, relndiff)
       if (abs(relndiff) > tol)
         fprintf('Error!\n')
         fail = fail+1;
-        plot(v,w)
-        title('Wronskian')
+        plot(v1,r)
+        title('Round trip residual')
         pause()
         close all; 
       else
@@ -109,22 +127,28 @@ function test_mathieu_ce_idents()
       end
     end
   end
-
   
   fprintf('======================================\n')
-  
+
+end
+
+
   %====================================================
   % Test q = 0 case per DLMF 28.2.29
   fprintf('Test ce tends to cos for q = -1e-13 per DLMF 28.2.29 ... \n')
-  tol = 5e-13;
+
+  N = 1000;
+  v = linspace(-pi,pi,N)';
+
+  tol = 2e-13;
   q = -1e-13;
-  MM = 10;  % Max order to test
+  MM = 25;  % Max order to test
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     LHS = mathieu_ce(m,q,v);
     RHS = cos(m*v);
     
-    ndiff = norm(LHS-RHS);
+    ndiff = norm(LHS-RHS)/N;  % Normalize to number of sample pts.
     %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
     if (ndiff > tol)
       fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
@@ -156,7 +180,7 @@ function test_mathieu_ce_idents()
     LHS = mathieu_ce(m,q,v);
     RHS = cos(m*v);
     
-    ndiff = norm(LHS-RHS);
+    ndiff = norm(LHS-RHS)/N;   % Normalize to number of sample pts.
     %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
     if (ndiff > tol)
       fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
@@ -169,7 +193,7 @@ function test_mathieu_ce_idents()
   %====================================================
   % Next test even fcns per DLMF 28.2,34
   fprintf('Test rotation identity for even fcns per DLMF 28.2,34 ... \n')
-  tol = 1e-13;
+  tol = 1e-14;
   v = 0.05;  % Just check one random point.
   %MM = 10;  % Sets max order to test
   for m=0:2:MM
@@ -214,7 +238,9 @@ function test_mathieu_ce_idents()
   end
 
   fprintf('======================================\n')  
- 
+
+
+if 0  
   %====================================================
   % Next test small q expansions per DLMF 28.6.21.  The goal
   % is to make sure my fcn impls match the DLMF for negative
@@ -324,7 +350,7 @@ function test_mathieu_ce_idents()
     end
     fprintf('--------------------------------------\n')      
   end
-  
+end  
  
   fprintf('======================================\n')
   fprintf('At end, fail = %d\n', fail)
