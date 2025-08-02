@@ -38,8 +38,8 @@ function [se, sed] = mathieu_se(m, q, v)
 	sedp = sedp + 2*k*B(k)*cos(2*k*v);
       end
     end
-    se = sep+sem;
-    sed = sedp+sedm;
+    se = sep-sem;
+    sed = sedp-sedm;
     % Hack -- make sure deriv is positive at v = 0.
     s = sign(sum(s.*B));
     se = s*se;
@@ -64,9 +64,9 @@ function [se, sed] = mathieu_se(m, q, v)
 	sedp = sedp + (2*k+1)*B(k+1)*cos((2*k+1)*v);
       end
     end
-    se = sep+sem;
-    sed = sedm+sedp;
-    % Hack -- make sure deriv is positive at v = 0.
+    se = sep-sem;
+    sed = sedp-sedm;
+    % Hack -- make sure deriv is positive at v = 0 for q<0.
     if (q<0)
       if (mod(m-1,4) < tol)
         s(2:2:end) = -1;

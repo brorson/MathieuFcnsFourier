@@ -41,9 +41,9 @@ function [ce, ced] = mathieu_ce(m, q, v)
       end
     end
     % I should do a sort before doing the sum
-    ce = cep+cem;
-    ced = cedp+cedm;
-    % Hack -- this makes sure the fcn has the right overall sign.
+    ce = cep-cem;
+    ced = cedp-cedm;
+    % Hack -- this makes sure the fcn has the right overall sign for q<0.
     if (q<0)
       if (mod(m,4) < tol)
         s(2:2:end) = -1;
@@ -77,9 +77,9 @@ function [ce, ced] = mathieu_ce(m, q, v)
 	cedp = cedp - (2*k+1)*A(k+1)*sin((2*k+1)*v);
       end
     end
-    ce = cep+cem;
-    ced = cedp+cedm;
-    % Hack -- make sure fcn has correct overall sign.
+    ce = cep-cem;
+    ced = cedp-cedm;
+    % Hack -- make sure fcn has correct overall sign for q<0.
     if (q<0)
       if (mod(m-1,4) < tol)
         s(2:2:end) = -1;

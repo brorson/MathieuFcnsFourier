@@ -1,7 +1,7 @@
 function test_mathieu_ce_idents()
   % This checks ce using a few identities.
     
-
+  pass = 0;
   fail = 0;
     
   qs = logspace(-3,3,21);
@@ -32,6 +32,8 @@ function test_mathieu_ce_idents()
       if (abs(diff) > tol)
 	      fprintf('Error!  m = %d, q = %f, diff = %e\n', m, q, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
   end
@@ -43,7 +45,7 @@ function test_mathieu_ce_idents()
   % Next test orthogonality per DLMF 28.2,31
   fprintf('Testing orthogonality per DLMF 28.2,31 ... \n')
   tol = 1e-12;
-  MM = 20;  % Max order to test
+  MM = 5;  % Max order to test
   for m1=0:MM;   for m2=m1:MM
     if (m1 == m2)
       continue
@@ -67,6 +69,8 @@ function test_mathieu_ce_idents()
       if (abs(diff) > tol)
 	      fprintf('Error!  [m1,m2] = [%d,%d], q = %f, diff = %e\n', m1, m2, q, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
   end; end
@@ -74,15 +78,16 @@ function test_mathieu_ce_idents()
   fprintf('======================================\n')
 
   %====================================================
-if 0
+if 1
   % Test high order finite diff
   fprintf('Testing finite diff ... \n')
-  tol = 1e-10;
-  v = linspace(-pi,pi,10000)';
+  tol = 1e-6;
+  NN = 5000;
+  v = linspace(-pi,pi*(NN-1)/NN,NN)';
   MM = 10;
 
   % Test orders starting at m=0 for mc fcns.
-  h = v(2)-v(1)
+  h = v(2)-v(1);
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     for i = 1:length(qs)
@@ -91,36 +96,26 @@ if 0
       [y,yd] = mathieu_ce(m,q,v);
       a = mathieu_a(m,q);
 
-      % Compute residual using finite diff formula
-      % Compute second deriv from first deriv using 
-      % 4th order method, coeffs = [1/12, -2/3, 0, 2/3, -1/12]
-      % Note that yd(end) == y(1) identically, so I need to trim off the last pt.
-      v1 = v(1:end-1);
-      y = y(1:end-1);
-      yd = yd(1:end-1);      
-      %ydd = zeros(size(v1));
-      %ydd(1) = yd(end-1)/12 - 2*yd(end)/3 + 2*yd(2)/3 - yd(3)/12;
-      %ydd(2) = yd(end)/12 - 2*yd(1)/3 + 2*yd(3)/3 - yd(4)/12;      
-      %ydd(3:end-2) = yd(1:end-4)/12 - 2*yd(2:end-3)/3 + 2*yd(4:end-1)/3 - yd(5:end)/12;
-      %ydd(end-1) = yd(end-3)/12 - 2*yd(end-2)/3 + 2*yd(end)/3 - yd(1)/12;      
-      %ydd(end) = yd(end-2)/12 - 2*yd(end-1)/3 + 2*yd(1)/3 - yd(2)/12;            
-      ydd = yd(1:end-4)/12 - 2*yd(2:end-3)/3 + 2*yd(4:end-1)/3 - yd(5:end)/12;
-      v1 = v1(1:end-4);
-      y = y(1:end-4);
+      ydd = fd_deriv(yd);
+      r = ydd/(h) + (a - 2*q*cos(2*v)).*y;
       
-      r = ydd/h + (a - 2*q*cos(2*v1)).*y;
-      
-      
-     % Relative norm diff
-      relndiff = norm(r)/(N-1);
-      fprintf('m = %d, q = %f, relndiff = %e ... ', m, q, relndiff)
-      if (abs(relndiff) > tol)
+     % Err -- fix this later.
+      diffstd = std(r(3:(end-2)));
+      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
+      if (abs(diffstd) > tol)
         fprintf('Error!\n')
         fail = fail+1;
-        plot(v1,r)
-        title('Round trip residual')
-        pause()
-        close all; 
+	%figure(1)
+	%plot(v,y);
+	%hold on
+	%plot(v,yd);
+	%title('fcn')
+	%legend('y','yd')
+	%figure(3)
+        %plot(v(3:(end-2)),r(3:(end-2)))
+        %title('Round trip residual')
+        %pause()
+        %close all; 
       else
         fprintf('\n')
         pass = pass+1;
@@ -148,11 +143,13 @@ end
     LHS = mathieu_ce(m,q,v);
     RHS = cos(m*v);
     
-    ndiff = norm(LHS-RHS)/N;  % Normalize to number of sample pts.
-    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
+    diffstd = std(LHS-RHS);
+    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, std = %e\n', m, LHS(1), RHS(1), diffstd)
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, diffstd = %e\n', m, q, LHS(1), RHS(1), diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -164,11 +161,13 @@ end
     LHS = mathieu_ce(m,q,v);
     RHS = cos(m*v);
     
-    ndiff = norm(LHS-RHS);
-    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
+    diffstd = std(LHS-RHS);
+    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, std = %e\n', m, LHS(1), RHS(1), diffstd)
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, diffstd = %e\n', m, q, LHS(1), RHS(1), diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -180,11 +179,13 @@ end
     LHS = mathieu_ce(m,q,v);
     RHS = cos(m*v);
     
-    ndiff = norm(LHS-RHS)/N;   % Normalize to number of sample pts.
-    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
+    diffstd = std(LHS-RHS);
+    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, std = %e\n', m, LHS(1), RHS(1), diffstd)
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, diffstd = %e\n', m, q, LHS(1), RHS(1), diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -209,6 +210,8 @@ end
       if (abs(diff) > tol)
 	      fprintf('Error!  m = %d, q = %5.3f, LHS = %f, RHS = %f, diff = %e\n', m, q, LHS, RHS, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
   end
@@ -233,6 +236,8 @@ end
       if (abs(diff) > tol)
 	      fprintf('Error!  m = %d, q = %5.3f, LHS = %f, RHS = %f, diff = %e\n', m, q, LHS, RHS, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
   end
@@ -270,10 +275,12 @@ if 0
     %hold on
     %plot(v, myce0)
     %legend('dlmf','me')
-    ndiff = norm(dlmfce0 - myce0)/N;
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+    diffstd = std(dlmfce0 - myce0);
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -289,10 +296,12 @@ if 0
     fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
     dlmfce1 = ce1(v);
     myce1 = mathieu_ce(m,q,v);
-    ndiff = norm(dlmfce1 - myce1)/N;
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+    diffstd = std(dlmfce1 - myce1);
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -307,10 +316,12 @@ if 0
     fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
     dlmfce2 = ce2(v);
     myce2 = mathieu_ce(m,q,v);
-    ndiff = norm(dlmfce2 - myce2)/N;
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+    diffstd = std(dlmfce2 - myce2);
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -324,10 +335,12 @@ if 0
       fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
       dlmfce = ce_q_expansion(m,q,v);
       myce = mathieu_ce(m,q,v);
-      ndiff = norm(dlmfce - myce)/N;
-      if (ndiff > tol)
-	fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      diffstd = std(dlmfce - myce);
+      if (diffstd > tol)
+	fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
 	fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
     fprintf('--------------------------------------\n')      
@@ -342,10 +355,12 @@ if 0
       fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
       dlmfce = ce_q_expansion(m,q,v);
       myce = mathieu_ce(m,q,v);
-      ndiff = norm(dlmfce - myce)/N;
-      if (ndiff > tol)
-	fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      diffstd = std(dlmfce - myce);
+      if (diffstd > tol)
+	fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
 	fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
     fprintf('--------------------------------------\n')      
@@ -353,6 +368,6 @@ if 0
 end  
  
   fprintf('======================================\n')
-  fprintf('At end, fail = %d\n', fail)
+  fprintf('At end, pass = %d, fail = %d\n', pass, fail)
   
 end

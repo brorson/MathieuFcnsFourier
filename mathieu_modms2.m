@@ -20,6 +20,12 @@ function [Ms,Msd] = mathieu_modms2(m, q, u)
     u = u';
   end
 
+ 
+  % Set offset used in Bessel fcn depending upon order m.
+  % This is per the book "Accurately Calculating Mathieu Functions",
+  % XXXXX & YYYY
+  c = 2;
+  
     
   % I find the peak Fourier coeff tracks m.  Therefore
   % I adjust the matrix size based on order m.

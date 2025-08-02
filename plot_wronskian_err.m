@@ -2,8 +2,8 @@ function plot_wronskian_err()
   % This makes a contour plot of the error
 
   % Parameters to vary
-  ms = 0:20;
-  qs = logspace(-3,3,20);
+  ms = 1:30;
+  qs = logspace(-4,4,30);
   
   % Domain
   N = 1000;
@@ -33,8 +33,8 @@ function plot_wronskian_err()
       % Compute Wronskian
       w = y1.*y2d - y1d.*y2;
       
-      % Relative norm diff
-      errs(i,j) = log10(norm(w-wtrue)/N);
+      % Err results
+      errs(i,j) = log10(std(w-wtrue));
       X(i,j) = m;
       Y(i,j) = log10(q);
       
@@ -46,6 +46,7 @@ function plot_wronskian_err()
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- Mc1 Mc2')
+
 
   %-----------------------------------------------------
   % Ms1 & Ms2
@@ -72,8 +73,8 @@ function plot_wronskian_err()
       % Compute Wronskian
       w = y1.*y2d - y1d.*y2;
       
-      % Relative norm diff
-      errs(i,j) = log10(norm(w-wtrue)/N);
+      % Err results
+      errs(i,j) = log10(std(w-wtrue));
       X(i,j) = m;
       Y(i,j) = log10(q);
       
@@ -111,8 +112,8 @@ function plot_wronskian_err()
       % Compute Wronskian
       w = y1.*y2d - y1d.*y2;
       
-      % Relative norm diff
-      errs(i,j) = log10(norm(w-wtrue)/N);
+      % Err results
+      errs(i,j) = log10(std(w-wtrue));
       X(i,j) = m;
       Y(i,j) = log10(q);
       
@@ -149,8 +150,8 @@ function plot_wronskian_err()
       % Compute Wronskian
       w = y1.*y2d - y1d.*y2;
       
-      % Relative norm diff
-      errs(i,j) = log10(norm(w-wtrue)/N);
+      % Err results
+      errs(i,j) = log10(std(w-wtrue));
       X(i,j) = m;
       Y(i,j) = log10(q);
       

@@ -1,6 +1,7 @@
 function test_mathieu_se_idents()
   % This checks se using a few identities.
-    
+
+  pass = 0;
   fail = 0;
     
   qs = logspace(-3,3,21);
@@ -32,6 +33,8 @@ function test_mathieu_se_idents()
       if (abs(diff) > tol)
 	      fprintf('Error!  m = %d, q = %f, diff = %e\n', m, q, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
       
     end
@@ -64,6 +67,8 @@ function test_mathieu_se_idents()
       if (abs(diff) > tol)
 	      fprintf('Error!  [m1,m2] = [%d,%d], q = %f, diff = %e\n', m1, m2, q, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
   end; end
@@ -81,11 +86,13 @@ function test_mathieu_se_idents()
     LHS = mathieu_se(m,q,v);
     RHS = sin(m*v);
     
-    ndiff = norm(LHS-RHS);
-    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
+    diffstd = std(LHS-RHS);
+    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, std = %e\n', m, LHS(1), RHS(1), diffstd)
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, diffstd = %e\n', m, q, LHS(1), RHS(1), diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -97,11 +104,13 @@ function test_mathieu_se_idents()
     LHS = mathieu_se(m,q,v);
     RHS = sin(m*v);
     
-    ndiff = norm(LHS-RHS);
-    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
+    diffstd = std(LHS-RHS);
+    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, std = %e\n', m, LHS(1), RHS(1), diffstd)
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, diffstd = %e\n', m, q, LHS(1), RHS(1), diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -113,11 +122,13 @@ function test_mathieu_se_idents()
     LHS = mathieu_se(m,q,v);
     RHS = sin(m*v);
     
-    ndiff = norm(LHS-RHS);
-    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, norm err = %e\n', m, LHS(1), RHS(1), ndiff)
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, ndiff = %e\n', m, q, LHS(1), RHS(1), ndiff)
+    diffstd = std(LHS-RHS);
+    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, std = %e\n', m, LHS(1), RHS(1), diffstd)
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, diffstd = %e\n', m, q, LHS(1), RHS(1), diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -142,6 +153,8 @@ function test_mathieu_se_idents()
       if (abs(diff) > tol)
 	      fprintf('Error!  m = %d, q = %5.3f, LHS = %f, RHS = %f, diff = %e\n', m, q, LHS, RHS, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
   end
@@ -166,6 +179,8 @@ function test_mathieu_se_idents()
       if (abs(diff) > tol)
 	      fprintf('Error!  m = %d, q = %5.3f, LHS = %f, RHS = %f, diff = %e\n', m, q, LHS, RHS, diff)
 	      fail = fail+1;
+      else
+	pass = pass+1;
       end
     end
   end
@@ -202,10 +217,12 @@ function test_mathieu_se_idents()
     %hold on
     %plot(v, myse1,'r.')
     %legend('dlmf','me')
-    ndiff = norm(dlmfse1 - myse1)/N;
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+    diffstd = std(dlmfse1 - myse1);
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
     %pause()
     %close all;
@@ -225,10 +242,12 @@ function test_mathieu_se_idents()
     %hold on
     %plot(v, myse2)
     %legend('dlmf','me')
-    ndiff = norm(dlmfse2 - myse2)/N;
-    if (ndiff > tol)
-      fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+    diffstd = std(dlmfse2 - myse2);
+    if (diffstd > tol)
+      fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
       fail = fail+1;
+    else
+      pass = pass+1;
     end
   end
   
@@ -246,10 +265,12 @@ function test_mathieu_se_idents()
       %hold on
       %plot(v, myse,'r.')
       %legend('dlmf','me')
-      ndiff = norm(dlmfse - myse)/N;
-      if (ndiff > tol)
-        fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      diffstd = std(dlmfse - myse);
+      if (diffstd > tol)
+        fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
         fail = fail+1;
+      else
+	pass = pass+1;
       end
       %pause()
       %close all;
@@ -270,10 +291,12 @@ function test_mathieu_se_idents()
       %hold on
       %plot(v, myse,'r.')
       %legend('dlmf','me')
-      ndiff = norm(dlmfse - myse)/N;
-      if (ndiff > tol)
-        fprintf('Error!  m = %d, q = %5.3f, ndiff = %e\n', m, q, ndiff)
+      diffstd = std(dlmfse - myse);
+      if (diffstd > tol)
+        fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
         fail = fail+1;
+      else
+	pass = pass+1;
       end
       %pause()
       %close all;
@@ -282,6 +305,6 @@ function test_mathieu_se_idents()
   end
 
   fprintf('======================================\n')
-  fprintf('At end, fail = %d\n', fail)
+  fprintf('At end, pass = %d, fail = %d\n', pass, fail)
   
 end

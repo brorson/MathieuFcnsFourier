@@ -7,10 +7,15 @@ function y = besselyd(n,x)
     
   if (n == 0)
     y = -bessely(1,x);
-    return
   else
     y = (bessely(n-1,x)-bessely(n+1,x))/2;
-    return
   end
+
+  if (n<0)
+    s = (-1)^n;
+    y = s*y;
+  end
+
+  return
 
 end

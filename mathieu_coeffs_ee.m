@@ -7,7 +7,10 @@ function A = mathieu_coeffs_ee(N,q,m)
     error('Must invoke ee function with even order m')
   end
   
-  M = make_matrix_ee(2*N,q);
+  M = make_matrix_ee(N+4,q);
+  
+  %fprintf('mathieu_coeffs_ee, condeig(M) = \n')
+  %disp(condeig(M))
   
   % This invokes arpack
   %[V,D] = eigs(M,N,'largestabs');

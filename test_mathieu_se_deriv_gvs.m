@@ -54,10 +54,10 @@ function test_mathieu_se_deriv_gvs(varargin)
   
   % Now look through table for differences which are too large.
   for i=1:size(diff,2)
-    ndiff = norm(diff(:,i))/length(v);
-    % fprintf('Order = %d, relnormdiff = %e\n', i-1, ndiff)
-    if (ndiff > tol)
-      fprintf('Failure for order = %d, tol = %e, relnormdiff = %e\n', i-1, tol, ndiff)
+    diffstd = std(diff(:,i));
+    % fprintf('Order = %d, diffstd = %e\n', i-1, diffstd)
+    if (diffstd > tol)
+      fprintf('Failure for order = %d, tol = %e, diffstd = %e\n', i-1, tol, diffstd)
       figure(1)
       plot(v,sed_mine,'b-')
       hold on

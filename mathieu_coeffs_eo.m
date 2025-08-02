@@ -7,8 +7,11 @@ function A = mathieu_coeffs_eo(N,q,m)
     error('Must invoke eo function with odd order m')
   end
   
-  M = make_matrix_eo(2*N,q);
+  M = make_matrix_eo(N+4,q);
   
+  %fprintf('mathieu_coeffs_eo, condeig(M) = \n')
+  %disp(condeig(M))
+
   %[V,D] = eigs(M,N,'largestabs');
   [V,D] = eig(M);  
   
@@ -17,8 +20,7 @@ function A = mathieu_coeffs_eo(N,q,m)
   %disp(D(idx))
   
   col = round( (m+1)/2 );
-  s = 1; % sign(V(1,col));  % Attempt to fix sign problems
   %fprintf('mathieu_coeffs_eo, col = %d\n', col)
-  A = s*V(1:N,col);
+  A = V(1:N,col);
   
 end

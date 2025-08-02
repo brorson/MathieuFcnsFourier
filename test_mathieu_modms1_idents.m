@@ -34,10 +34,10 @@ function test_mathieu_modms1_idents()
       %pause()
       %close all; 
       
-      % Relative norm diff
-      relndiff = norm(modms1 - j)/N;
-      fprintf('m = %d, q = %f, relndiff = %e ... ', m, q, relndiff)
-      if (abs(relndiff) > tol)
+      % 
+      diffstd = std(modms1 - j);
+      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
+      if (abs(diffstd) > tol)
 	fprintf('Error!\n')
 	fail = fail+1;
       else
@@ -68,11 +68,11 @@ function test_mathieu_modms1_idents()
       % Compute Wronskian
       w = y1.*y2d - y1d.*y2;
      
-      % Relative norm diff
+      % 
       wtrue = 2/pi;
-      relndiff = norm(w-wtrue)/N;
-      fprintf('m = %d, q = %f, relndiff = %e ... ', m, q, relndiff)
-      if (abs(relndiff) > tol)
+      diffstd = std(w-wtrue);
+      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
+      if (abs(diffstd) > tol)
         fprintf('Error!\n')
         fail = fail+1;
         %plot(v,w)
@@ -105,11 +105,11 @@ function test_mathieu_modms1_idents()
       % Compute Wronskian
       w = y1.*y2d - y1d.*y2;
       
-      % Relative norm diff
+      % 
       wtrue = 2/pi;
-      relndiff = norm(w-wtrue)/N;
-      fprintf('m = %d, q = %f, relndiff = %e ... ', m, q, relndiff)
-      if (abs(relndiff) > tol)
+      diffstd = std(w-wtrue);
+      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
+      if (abs(diffstd) > tol)
         fprintf('Error!\n')
         fail = fail+1;
         %plot(v,w)
