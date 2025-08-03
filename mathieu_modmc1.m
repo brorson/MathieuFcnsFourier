@@ -20,12 +20,12 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
   % Set offset used in Bessel fcn depending upon order m.
   % This is per the book "Accurately Calculating Mathieu Functions",
   % XXXXX & YYYY
-  if ((m>5 && q<1) || (m>14 && q<30) || (m>26 && q<100)  )
-    c = floor(m/2)-1;
-  else
-    c = 0;
-  end
-
+%  if ((m>5 && q<1) || (m>14 && q<30) || (m>26 && q<100)  )
+%    c = floor(m/2);
+%  else
+%    c = 0;
+%  end
+c = 0;
 
   % I find the peak Fourier coeff tracks m.  Therefore
   % I adjust the matrix size based on order m.

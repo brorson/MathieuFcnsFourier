@@ -46,7 +46,10 @@ function plot_wronskian_err()
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- Mc1 Mc2')
+  caxis([-20 10])
+  colormap default
 
+return
 
   %-----------------------------------------------------
   % Ms1 & Ms2
@@ -86,6 +89,9 @@ function plot_wronskian_err()
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- ms1 ms2')
+  caxis([-20 10])
+  colormap default
+
 
   %-----------------------------------------------------
   % Mc1 & Ms2
@@ -125,6 +131,10 @@ function plot_wronskian_err()
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- mc1 ms2')
+  caxis([-20 10])
+  colormap default
+
+
   %-----------------------------------------------------
   % Ms1 & Mc2
   fprintf('Computing Wronskian of Ms1 & Mc2\n')
@@ -163,5 +173,8 @@ function plot_wronskian_err()
   xlabel('Order m')
   ylabel('log10(q)')
   title('Log10 of Wronskian error -- ms1 mc2')
+  caxis([-20 10])
+  colormap default
+
 
 end
