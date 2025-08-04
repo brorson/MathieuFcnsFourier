@@ -1,7 +1,7 @@
 function plot_mathieu_modmc1()
   % This plots the modified Mathieu Mc fcns of first kind.
     
-  q = 1;
+  q = 30;
 
   v = linspace(0,5,1000)';
 
@@ -51,18 +51,18 @@ function plot_mathieu_modmc1()
   %==============================================
   % Compare against besselj for large u per
   % DLMF 28.20.11
-  figure(4)
   m=5;
   N = 10000;
   u = linspace(0,5,N)';
-  q = 1;
+  q = 30;
   yj = besselj(m,2*sqrt(q)*cosh(u));
   ym = mathieu_modmc1(m,q,u);
   % I need to change sign to match the Bessel fcn.
   %if (sign(ym(end)) ~= sign(yj(end)))
   %  ym = -ym;
   %end
-  
+
+  figure(4)
   plot(u,yj)
   hold on
   plot(u,ym)
@@ -73,6 +73,37 @@ function plot_mathieu_modmc1()
   diff = ym-yj;
   semilogy(u,abs(diff));
   title('difference')
+  
+  %==============================================
+  % Compare against high-order FD approx to original eq.
+  % DLMF 28.20.11
+  m=4;
+  N = 1000;
+  u = linspace(0,5,N)';
+  h = u(2)-u(1);
+  q = 100;
+
+  [y,yd] = mathieu_ce(m,q,u);
+  a = mathieu_a(m,q);
+
+  ydd = fd_deriv(yd);
+  r = ydd/(h) + (a - 2*q*cos(2*u)).*y;
+     
+  plt_range = 5:N-4;
+  
+  figure(6)
+  plot(u,y)
+  hold on
+  plot(u,yd)
+  title('ce and ced')
+  
+  figure(7)
+  plot(u(plt_range), r(plt_range))
+  title('Deviation from finite diff approx')
+
+  err = std(r(plt_range));
+  l2norm = norm(r(plt_range));
+  fprintf('Parameter q = %f, abs err = %e, norm err = %e\n', q, err, err/l2norm)
   
 end
 
