@@ -9,7 +9,7 @@ function plot_round_trip_err()
 	      % not sure why.
   MM = 30;  % Max order to test.
 
-if 1
+if 0
   %========================================================
   %-----------------------------------------------------
   % ce
@@ -61,7 +61,7 @@ if 1
   colormap default
 end
 
-if 1
+if 0
   %========================================================
   %-----------------------------------------------------
   % se
@@ -146,9 +146,10 @@ end
      % I have some sort of bug in taking the deriv, so I need
      % to truncate the residual vector.  Must fix this later.
      stddev = std(r(5:(end-4)));
+     l2norm = norm(y(5:end-4));
      
      % Err results
-     errs(i,j) = log10(stddev);
+     errs(i,j) = log10(stddev/l2norm);
      X(i,j) = m;
      Y(i,j) = log10(q);
      
@@ -167,7 +168,7 @@ end
   %========================================================
   %-----------------------------------------------------
   % modmc2
-  v = linspace(0,5,NN)';
+  v = linspace(0.01,5,NN)';  % Fcn is singular at v = 0;
   h = v(2)-v(1);
 
   % Parameters to vary
@@ -196,9 +197,10 @@ end
      % I have some sort of bug in taking the deriv, so I need
      % to truncate the residual vector.  Must fix this later.
      stddev = std(r(5:(end-4)));
+     l2norm = norm(y(5:end-4));
      
      % Err results
-     errs(i,j) = log10(stddev);
+     errs(i,j) = log10(stddev/l2norm);
      X(i,j) = m;
      Y(i,j) = log10(q);
      
@@ -214,7 +216,7 @@ end
   colormap default
 
 
-  
+if 0  
   %========================================================
   %-----------------------------------------------------
   % modms1
@@ -247,9 +249,10 @@ end
      % I have some sort of bug in taking the deriv, so I need
      % to truncate the residual vector.  Must fix this later.
      stddev = std(r(5:(end-4)));
+     l2norm = norm(y(5:end-4));
      
      % Err results
-     errs(i,j) = log10(stddev);
+     errs(i,j) = log10(stddev/l2norm);
      X(i,j) = m;
      Y(i,j) = log10(q);
      
@@ -263,12 +266,14 @@ end
   title('Log10 of round-trip error -- modms1')
   caxis([-20 5])
   colormap default
+end
 
 
+if 0
   %========================================================
   %-----------------------------------------------------
   % modms2
-  v = linspace(0,5,NN)';
+  v = linspace(0.01,5,NN)';  % Fcn is singular at v = 0;
   h = v(2)-v(1);
 
   % Parameters to vary
@@ -297,9 +302,10 @@ end
      % I have some sort of bug in taking the deriv, so I need
      % to truncate the residual vector.  Must fix this later.
      stddev = std(r(5:(end-4)));
+     l2norm = norm(y(5:end-4));
      
      % Err results
-     errs(i,j) = log10(stddev);
+     errs(i,j) = log10(stddev/l2norm);
      X(i,j) = m;
      Y(i,j) = log10(q);
      
@@ -313,6 +319,6 @@ end
   title('Log10 of round-trip error -- modms2')
   caxis([-20 5])
   colormap default
-
+end
 
 end
