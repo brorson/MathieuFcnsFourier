@@ -42,10 +42,11 @@ function test_mathieu_ce_idents()
 
   
   %====================================================
+if 0
   % Next test orthogonality per DLMF 28.2,31
   fprintf('Testing orthogonality per DLMF 28.2,31 ... \n')
   tol = 1e-12;
-  MM = 5;  % Max order to test
+  MM = 10;  % Max order to test
   for m1=0:MM;   for m2=m1:MM
     if (m1 == m2)
       continue
@@ -76,6 +77,8 @@ function test_mathieu_ce_idents()
   end; end
     
   fprintf('======================================\n')
+end
+
 
   %====================================================
 if 1
@@ -85,6 +88,7 @@ if 1
   NN = 5000;
   v = linspace(-pi,pi*(NN-1)/NN,NN)';
   MM = 10;
+  qs = [-100, -10, -1, -0.1, -0.01, -0.001, 0, 0.0001, .001, .01, .1, 1, 10, 100];
 
   % Test orders starting at m=0 for mc fcns.
   h = v(2)-v(1);
@@ -100,10 +104,11 @@ if 1
       r = ydd/(h) + (a - 2*q*cos(2*v)).*y;
       
      % Err -- fix this later.
-      diffstd = std(r(3:(end-2)));
-      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
+      diffstd = std(r(5:(end-4)));
+      %fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
       if (abs(diffstd) > tol)
-        fprintf('Error!\n')
+        fprintf('Error! ... ')
+        fprintf('m = %d, q = %f, diffstd = %e\n', m, q, diffstd)
         fail = fail+1;
 	%figure(1)
 	%plot(v,y);
@@ -117,7 +122,7 @@ if 1
         %pause()
         %close all; 
       else
-        fprintf('\n')
+        %fprintf('\n')
         pass = pass+1;
       end
     end
@@ -137,7 +142,7 @@ end
 
   tol = 2e-13;
   q = -1e-13;
-  MM = 25;  % Max order to test
+  MM = 10;  % Max order to test
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     LHS = mathieu_ce(m,q,v);

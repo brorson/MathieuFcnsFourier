@@ -36,12 +36,12 @@ function plot_mathieu_ce()
   legend(leg,'Location','SouthWest')
 
   %=========================================================
-    %==============================================
+  %==============================================
   % Compare against high-order FD approx to original eq.
   % DLMF 28.20.11
-  m=20;
+  m=7;
   N = 1000;
-  u = linspace(0,5,N)';
+  u = linspace(0,2*pi,N)';
   h = u(2)-u(1);
   q = 100;
 
@@ -58,6 +58,7 @@ function plot_mathieu_ce()
   hold on
   plot(u,yd)
   title('ce and ced')
+  legend('ce','ced')
   
   figure(7)
   plot(u(plt_range), r(plt_range))

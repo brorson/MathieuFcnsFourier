@@ -39,10 +39,10 @@ function plot_mathieu_modmc2()
   %==============================================
   % Compare against bessely for large u per
   % DLMF 28.20.11
-  figure(4)
-  m=7;
+
+  m=15;
   N = 10000;
-  u = linspace(0,5,N)';
+  u = linspace(.1,5,N)';
   q = 1;
   yy = bessely(m,2*sqrt(q)*cosh(u));
   ym = mathieu_modmc2(m,q,u);
@@ -51,6 +51,7 @@ function plot_mathieu_modmc2()
   %  ym = -ym;
   %end
   
+  figure(4)
   plot(u,yy)
   hold on
   plot(u,ym)

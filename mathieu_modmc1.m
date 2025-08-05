@@ -20,7 +20,6 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
   % Set offset used in Bessel fcn depending upon order m.
   % This is per the book "Accurately Calculating Mathieu Functions",
   % XXXXX & YYYY
-  %if ((m>10 && q<.1) || (m>14 && q<30) || (m>26 && q<100)  )
   if ( (m>10 && q<.1) || (m>20 && q<100) )
     c = floor(m/2);
   else
@@ -44,10 +43,10 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
     % Even -- m = 0, 2, 4, 6, ...
     %fprintf('Even Mathieu Mc(1), m = %d\n', m)
     A = mathieu_coeffs_ee(N,q,m);
-    Mcp = 0;
-    Mcm = 0;
-    Mcdp = 0;
-    Mcdm = 0;
+    Mcp = zeros(size(u));
+    Mcm = zeros(size(u));
+    Mcdp = zeros(size(u));
+    Mcdm = zeros(size(u));
     for k=(N-1):-1:0
     %for k=0:(N-1)
       if (c==0)
@@ -106,10 +105,10 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
     % Odd -- m = 1, 3, 5, 7 ...
     %fprintf('Odd Mathieu Mc(1), m = %d\n', m)
     A = mathieu_coeffs_eo(N,q,m);
-    Mcp = 0;
-    Mcm = 0;
-    Mcdp = 0;
-    Mcdm = 0;
+    Mcp = zeros(size(u));
+    Mcm = zeros(size(u));
+    Mcdp = zeros(size(u));
+    Mcdm = zeros(size(u));
     for k=(N-1):-1:0
       if (c==0)
         Jks = besselj(k,s);

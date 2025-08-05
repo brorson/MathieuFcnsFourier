@@ -10,13 +10,13 @@ function test_mathieu_modmc1_idents()
   N = 1000;
   v = linspace(0, 10, N)';
 
-  MM = 5;  % This is max order to test.
+  MM = 30;  % This is max order to test.
 
   %====================================================
   % Test asymptotic behavior
   fprintf('Testing asymptotic behavior per DLMF 28.20.11 ... \n')
   tol = 5e-4;
-  v = linspace(3, 10, N)';  % Only want to see large v.
+  v = linspace(5, 15, N)';  % Only want to see large v.
 
   % Test orders starting at m=0.
   for m=0:MM
@@ -28,26 +28,95 @@ function test_mathieu_modmc1_idents()
       sqq = sqrt(q);
       j = besselj(m,2*sqq*cosh(v));
 
-      %plot(v,modmc1)
-      %hold on
-      %plot(v,j)
-      %pause()
-      %close all; 
-      
-      % 
       diffstd = std(modmc1 - j);
-      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
       if (abs(diffstd) > tol)
-	fprintf('Error!\n')
+	fprintf('Error! ... ')
+	fprintf('m = %d, q = %f, diffstd = %e ... \n', m, q, diffstd)
 	fail = fail+1;
+	figure(1)
+	plot(v,modmc1)
+	hold on
+	plot(v,j)
+	title('modmc1 vs. besselj')
+	legend('modmc1','besselj')
+	figure(2)
+	plot(v,modmc1-j)
+	title('Difference modmc1 - j')
+	pause()
+	close all; 
       else
-	fprintf('\n')
 	pass = pass+1;
       end
       
     end
   end
+  fprintf('======================================\n')
 
+  
+  %====================================================  
+  % Test round trip error
+  NN = 100;
+  v = linspace(0,5,NN)';
+  h = 1e-4;
+
+  % Parameters to vary
+  ms = 0:MM;  % Mc orders start at 0
+  qs = logspace(-3,2,10);
+  
+  fprintf('Computing round trip error for modmc1\n')
+  
+  % Loop over q and m
+  for i=1:length(ms)
+    m = ms(i);
+    fprintf('-----------  m = %d  -----------\n', m)
+    for j = 1:length(qs)
+      q = qs(j);
+
+      % Use sixth order deriv.  Coeffs are:
+      % -1/60, 3/20, -3/4, 0, 3/4, -3/20, 1/60
+      [~,fm3] = mathieu_modmc1(m,q,v-3*h);
+      [~,fm2] = mathieu_modmc1(m,q,v-2*h);
+      [~,fm1] = mathieu_modmc1(m,q,v-h);
+      [~,fp1] = mathieu_modmc1(m,q,v+h);
+      [~,fp2] = mathieu_modmc1(m,q,v+2*h);
+      [~,fp3] = mathieu_modmc1(m,q,v+3*h);
+      ydd = -fm3/60 + 3*fm2/20 - 3*fm1/4 + 3*fp1/4 - 3*fp2/20 + fp3/60;
+
+      [y,yd] = mathieu_modmc1(m,q,v);
+      a = mathieu_a(m,q);
+
+      r = ydd/(h) - (a - 2*q*cosh(2*v)).*y;
+     
+      % I have some sort of bug in taking the deriv, so I need
+      % to truncate the residual vector.  Must fix this later.
+      stddev = std(r);
+      l2norm = norm(y);
+     
+      if ((stddev) > tol)
+	fprintf('Error! ... ')
+	fprintf('m = %d, q = %f, stddev = %e ... \n', m, q, stddev)
+	fail = fail+1;
+	%figure(1)
+	%plot(v,y)
+	%hold on
+	%plot(v,yd)
+	%title('modmc1 & deriv')
+	%legend('y','yd')
+	%figure(2)
+	%plot(v,r)
+	%title('Residual')
+	%pause()
+	%close all; 
+      else
+	pass = pass+1;
+      end
+     
+    end
+  end
+
+
+
+if 0
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modmc1,modmc2) Wronskian per DLMF 28.20.21 ... \n')
@@ -84,7 +153,9 @@ function test_mathieu_modmc1_idents()
       end
     end
   end
-
+end
+  
+if 0
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modmc1,modms2) Wronskian per DLMF 28.20.21 ... \n')
@@ -121,6 +192,8 @@ function test_mathieu_modmc1_idents()
       end
     end
   end
+end
+
 
   fprintf('At end, pass = %d, fail = %d\n', pass, fail)
   

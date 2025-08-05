@@ -10,7 +10,6 @@ function [ce, ced] = mathieu_ce(m, q, v)
     v = v';
   end
   
-    
   % I find the peak Fourier coeff tracks m.  Therefore
   % Adjust the matrix size based on order m.
   N = m+25;
@@ -18,32 +17,41 @@ function [ce, ced] = mathieu_ce(m, q, v)
   % Use different coeffs depending upon whether m is even or
   % odd.
   tol = 1e-14;
-  if (abs(mod(m,2) < tol))
+  if (abs(mod(m,2)) < tol)
     % Even
     %fprintf('Even Mathieu ce, m = %d\n', m)    
 
     A = mathieu_coeffs_ee(N,(q),m);
-    s = ones(size(A));
-    % Sum on 0, 2, 4, 6, ...
-    % Sum from smallest to largest coeff.
-    % k = (0:N-1)';
     cem = zeros(size(v));  % Actual fcn -- minus terms
     cep = zeros(size(v));  % Acutal fcn -- pos terms
     cedm = zeros(size(v)); % Deriv -- minus terms
     cedp = zeros(size(v)); % Deriv -- plus terms
+
+    % Sum on 0, 2, 4, 6, ...
+    % Sum from smallest to largest coeff.
+    % k = (0:N-1)';
     for k=(N-1):-1:0
-      if (s(k+1)<0)
-        cem = cem + s(k+1)*A(k+1)*cos(2*k*v);
-	cedm = cedm - 2*k*A(k+1)*sin(2*k*v);
+      t = A(k+1)*cos(2*k*v);
+      td = -2*k*A(k+1)*sin(2*k*v);
+      if (t<0)
+        cem = cem + t;  % Neg running sum
       else
-        cep = cep + s(k+1)*A(k+1)*cos(2*k*v);
-	cedp = cedp - 2*k*A(k+1)*sin(2*k*v);  
+        cep = cep + t;  % Pos running sum
       end
+
+      if (td<0)
+	      cedm = cedm + td;
+      else
+	      cedp = cedp + td;  
+      end
+
     end
     % I should do a sort before doing the sum
-    ce = cep-cem;
-    ced = cedp-cedm;
+    ce = cep+cem;
+    ced = cedp+cedm;
+
     % Hack -- this makes sure the fcn has the right overall sign for q<0.
+    s = ones(size(A));
     if (q<0)
       if (mod(m,4) < tol)
         s(2:2:end) = -1;
@@ -51,35 +59,45 @@ function [ce, ced] = mathieu_ce(m, q, v)
         s(1:2:end) = -1;
       end
     end
-    s = sign(sum(s.*A));
-    ce = s*ce;
-    ced = s*ced;
+    ss = sign(sum(s.*A));
+    ce = ss.*ce;
+    ced = ss.*ced;
 
   else
     % Odd
     %fprintf('Odd Mathieu ce, m = %d\n', m)
 
     A = mathieu_coeffs_eo(N,(q),m);
-    s = ones(size(A));
-    % Sum on 1, 3, 5, 7, ...
-    % Sum from smallest to largest coeff.
-    % k = (0:N-1)';
+
     cem = zeros(size(v));
     cep = zeros(size(v));
     cedm = zeros(size(v));
     cedp = zeros(size(v));
+
+    % Sum on 1, 3, 5, 7, ...
+    % Sum from smallest to largest coeff.
+    % k = (0:N-1)';
     for k=(N-1):-1:0
-      if (s(k+1)<0)
-        cem = cem + s(k+1)*A(k+1)*cos((2*k+1)*v);
-	cedm = cedm - (2*k+1)*A(k+1)*sin((2*k+1)*v);
+      t = A(k+1)*cos((2*k+1)*v);
+      td = -(2*k+1)*A(k+1)*sin((2*k+1)*v);
+      if (t<0)
+        cem = cem + t;  % Neg running sum
       else
-        cep = cep + s(k+1)*A(k+1)*cos((2*k+1)*v);
-	cedp = cedp - (2*k+1)*A(k+1)*sin((2*k+1)*v);
+        cep = cep + t;  % Pos running sum
       end
+
+      if (td<0)
+	      cedm = cedm + td;
+      else
+	      cedp = cedp + td;  
+      end
+
     end
-    ce = cep-cem;
-    ced = cedp-cedm;
-    % Hack -- make sure fcn has correct overall sign for q<0.
+    ce = cep+cem;
+    ced = cedp+cedm;
+
+    % Hack -- this makes sure the fcn has the right overall sign for q<0.
+    s = ones(size(A));
     if (q<0)
       if (mod(m-1,4) < tol)
         s(2:2:end) = -1;
@@ -87,9 +105,9 @@ function [ce, ced] = mathieu_ce(m, q, v)
         s(1:2:end) = -1;
       end
     end
-    s = sign(sum(s.*A));
-    ce = s*ce;
-    ced = s*ced;
+    ss = sign(sum(s.*A));
+    ce = ss*ce;
+    ced = ss*ced;
   end
 
 end

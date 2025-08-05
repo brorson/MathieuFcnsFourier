@@ -20,13 +20,12 @@ function [Mc,Mcd] = mathieu_modmc2(m, q, u)
   % Set offset used in Bessel fcn depending upon order m.
   % This is per the book "Accurately Calculating Mathieu Functions",
   % XXXXX & YYYY
-  %if ((m>5 && q<1) || (m>14 && q<30) || (m>26 && q<100)  )
   if ( (m>10 && q<.1) || (m>20 && q<100) )
     c = floor(m/2);
   else
     c = 0;
   end
-%c = 0;
+%  c = 0;
 
   % I find the peak Fourier coeff tracks m.  Therefore
   % I adjust the matrix size based on order m.
@@ -44,16 +43,18 @@ function [Mc,Mcd] = mathieu_modmc2(m, q, u)
     % Even
     %fprintf('Even Mathieu Mc(2), m = %d\n', m)
     A = mathieu_coeffs_ee(N,q,m);
-    Mcp = 0;
-    Mcm = 0;
-    Mcdp = 0;
-    Mcdm = 0;
+    Mcp = zeros(size(u));
+    Mcm = zeros(size(u));
+    Mcdp = zeros(size(u));
+    Mcdm = zeros(size(u));
     for k=(N-1):-1:0
       if (c==0)
         Jks = besselj(k,s);
         Ykt = bessely(k,t);
+
         Jdks = besseljd(k,s);
         Ydkt = besselyd(k,t);
+        
         if (mod(k,2) == 0)
           % Even plus terms
           Mcp = Mcp + A(k+1)*Jks.*Ykt ;
@@ -103,10 +104,10 @@ function [Mc,Mcd] = mathieu_modmc2(m, q, u)
     % Odd
     %fprintf('Odd Mathieu Mc(2), m = %d\n', m)
     A = mathieu_coeffs_eo(N,q,m);
-    Mcp = 0;
-    Mcm = 0;
-    Mcdp = 0;
-    Mcdm = 0;
+    Mcp = zeros(size(u));
+    Mcm = zeros(size(u));
+    Mcdp = zeros(size(u));
+    Mcdm = zeros(size(u));
     for k=(N-1):-1:0
       if (c==0)
         Jks = besselj(k,s);

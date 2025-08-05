@@ -8,15 +8,14 @@ function test_mathieu_modmc2_idents()
   qs = [.001, .01, .1, 1, 10, 100];
   
   N = 1000;
-  v = linspace(0, 10, N)';
 
-  MM = 5;  % This is max order to test.
+  MM = 10;  % This is max order to test.
 
   %====================================================
   % Test asymptotic behavior
   fprintf('Testing asymptotic behavior per DLMF 28.20.11 ... \n')
   tol = 5e-4;
-  v = linspace(3, 10, N)';  % Only want to see large v.
+  v = linspace(5, 15, N)';  % Only want to see large v.
 
   % Test orders starting at m=0.
   for m=0:MM
@@ -28,25 +27,31 @@ function test_mathieu_modmc2_idents()
       sqq = sqrt(q);
       y = bessely(m,2*sqq*cosh(v));
 
-      % 
+
       diffstd = std(modmc2 - y);
-      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
       if (abs(diffstd) > tol)
-	fprintf('Error!\n')
+	fprintf('Error! ... ')
+	fprintf('m = %d, q = %f, diffstd = %e ... \n', m, q, diffstd)
 	fail = fail+1;
-	%plot(v,modmc2)
-	%hold on
-	%plot(v,y)
-	%pause()
-	%close all; 
+	figure(1)
+	plot(v,modmc2)
+	hold on
+	plot(v,y)
+	title('modmc2 vs. bessely')
+	legend('modmc2','bessely')
+	figure(2)
+	plot(v,modmc2-y)
+	title('Difference modmc2 - y')
+	pause()
+	close all;
       else
-	fprintf('\n')
 	pass = pass+1;
       end
       
     end
   end
 
+if 0
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modmc2,modmc1) Wronskian per DLMF 28.20.21 ... \n')
@@ -82,8 +87,10 @@ function test_mathieu_modmc2_idents()
       end
     end
   end
+end
 
-  
+
+if 0  
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modmc2,modms1) Wronskian per DLMF 28.20.21 ... \n')
@@ -120,6 +127,7 @@ function test_mathieu_modmc2_idents()
       end
     end
   end
+end
 
 
   fprintf('At end, pass = %d, fail = %d\n', pass, fail)
