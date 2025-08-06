@@ -33,16 +33,16 @@ function test_mathieu_modmc2_idents()
 	fprintf('Error! ... ')
 	fprintf('m = %d, q = %f, diffstd = %e ... \n', m, q, diffstd)
 	fail = fail+1;
-	figure(1)
-	plot(v,modmc2)
-	hold on
-	plot(v,y)
-	title('modmc2 vs. bessely')
-	legend('modmc2','bessely')
-	figure(2)
-	plot(v,modmc2-y)
-	title('Difference modmc2 - y')
-	pause()
+	%figure(1)
+	%plot(v,modmc2)
+	%hold on
+	%plot(v,y)
+	%title('modmc2 vs. bessely')
+	%legend('modmc2','bessely')
+	%figure(2)
+	%plot(v,modmc2-y)
+	%title('Difference modmc2 - y')
+	%pause()
 	close all;
       else
 	pass = pass+1;
@@ -51,6 +51,70 @@ function test_mathieu_modmc2_idents()
     end
   end
 
+%====================================================  
+  % Test round trip error
+  NN = 100;
+  v = linspace(2,5,NN)';
+  h = 1e-4;
+  tol = 1e-3;
+
+  % Parameters to vary
+  ms = 0:MM;  % Mc orders start at 0
+  qs = logspace(-4,2,10);
+  
+  fprintf('Computing round trip error for modmc2\n')
+  
+  % Loop over q and m
+  for i=1:length(ms)
+    m = ms(i);
+    fprintf('-----------  m = %d  -----------\n', m)
+    for j = 1:length(qs)
+      q = qs(j);
+
+      % Use sixth order deriv.  Coeffs are:
+      % -1/60, 3/20, -3/4, 0, 3/4, -3/20, 1/60
+      [~,fm3] = mathieu_modmc2(m,q,v-3*h);
+      [~,fm2] = mathieu_modmc2(m,q,v-2*h);
+      [~,fm1] = mathieu_modmc2(m,q,v-h);
+      [~,fp1] = mathieu_modmc2(m,q,v+h);
+      [~,fp2] = mathieu_modmc2(m,q,v+2*h);
+      [~,fp3] = mathieu_modmc2(m,q,v+3*h);
+      ydd = -fm3/60 + 3*fm2/20 - 3*fm1/4 + 3*fp1/4 - 3*fp2/20 + fp3/60;
+
+      [y,yd] = mathieu_modmc2(m,q,v);
+      a = mathieu_a(m,q);
+
+      r = ydd/(h) - (a - 2*q*cosh(2*v)).*y;
+     
+      % I have some sort of bug in taking the deriv, so I need
+      % to truncate the residual vector.  Must fix this later.
+      stddev = std(r);
+      l2norm = norm(y);
+     
+      if ((stddev/l2norm) > tol)
+        fprintf('Error! ... ')
+        fprintf('m = %d, q = %f, stddev = %e, l2norm = %e ... \n', ...
+		m, q, stddev, l2norm)
+        fail = fail+1;
+        %figure(1)
+        %plot(v,y)
+        %hold on
+        %plot(v,yd)
+        %title('modmc2 & deriv')
+        %legend('y','yd')
+        %figure(2)
+        %plot(v,r)
+        %title('Residual')
+        %pause()
+        %close all; 
+      else
+        pass = pass+1;
+      end
+     
+    end
+  end
+
+  
 if 0
   fprintf('======================================\n')
   % Test Wronskian

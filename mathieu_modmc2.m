@@ -93,6 +93,7 @@ function [Mc,Mcd] = mathieu_modmc2(m, q, u)
 
     % Later do sort and sum, or Kahan summation
     Mc = Mcp - Mcm;
+    %fprintf('Mcp = %e, Mcm = %e, Mc = %e\n', Mcp, Mcm, Mc) 
     Mcd = Mcdp - Mcdm;
 
     % Do normalization.  Note normalization depends upon c.
@@ -164,6 +165,7 @@ function [Mc,Mcd] = mathieu_modmc2(m, q, u)
 
     % Later do sort and sum, or Kahan summation
     Mc = Mcp - Mcm;
+    %fprintf('Mcp = %e, Mcm = %e, Mc = %e\n', Mcp, Mcm, Mc) 
     Mcd = Mcdp - Mcdm;
 
     % Do normalization.  Note normalization depends upon c.

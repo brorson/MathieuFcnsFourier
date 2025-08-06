@@ -56,14 +56,18 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
         Jdks = besseljd(k,s);
         Jdkt = besseljd(k,t);
 
+	% I don't use the (-1)^n idiom.  Instead I just either add or subtract
+	% terms directly.  The goal is to minimize catastrophic cancellation
+	% by summing pos with pos and neg with neg.  Then I subtract
+	% the whole thing below.
         if (mod(k,2) == 0)
-          % Even plus terms
+          % Additive terms
           Mcp = Mcp + A(k+1)*(Jks.*Jkt);
-          Mcdp = Mcdp + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt) ;
-        else
-          % Odd minus terms.
+          Mcdp = Mcdp + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt);
+         else
+          % Subtractive terms.
           Mcm = Mcm + A(k+1)*(Jks.*Jkt);
-          Mcdm = Mcdm + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt) ;
+          Mcdm = Mcdm + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt);
         end
 
       else
@@ -92,8 +96,10 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
         end
       end
     end
-    % Later do sort and sum, or Kahan summation
+    % Subtract for now.
+    % Later implement sort and sum, or Kahan summation if needed.
     Mc = Mcp - Mcm;
+    %fprintf('Mcp = %e, Mcm = %e, Mc = %e\n', Mcp, Mcm, Mc)    
     Mcd = Mcdp - Mcdm;
 
     % Do normalization.  Note normalization depends upon c.
@@ -163,6 +169,7 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
 
     end
     Mc = Mcp - Mcm;
+    %fprintf('Mcp = %e, Mcm = %e, Mc = %e\n', Mcp, Mcm, Mc)    
     Mcd = Mcdp - Mcdm;
 
     % Do normalization.  Note normalization depends upon c.

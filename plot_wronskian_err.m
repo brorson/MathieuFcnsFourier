@@ -6,12 +6,13 @@ function plot_wronskian_err()
   qs = logspace(-4,4,30);
   
   % Domain
-  N = 1000;
-  v = linspace(0, 10, N)';
+  N = 100;
+  v = linspace(2, 5, N)';
 
   % True value of Wronskian  
   wtrue = 2/pi;  
 
+if 1
   %-----------------------------------------------------
   % Mc1 & Mc2
   fprintf('Computing Wronskian of Mc1 & Mc2\n')
@@ -48,9 +49,10 @@ function plot_wronskian_err()
   title('Log10 of Wronskian error -- Mc1 Mc2')
   caxis([-20 10])
   colormap default
+end
 
-return
 
+if 0
   %-----------------------------------------------------
   % Ms1 & Ms2
   fprintf('Computing Wronskian of Ms1 & Ms2\n')
@@ -91,8 +93,10 @@ return
   title('Log10 of Wronskian error -- ms1 ms2')
   caxis([-20 10])
   colormap default
+end
 
 
+if 0
   %-----------------------------------------------------
   % Mc1 & Ms2
   fprintf('Computing Wronskian of Mc1 & Ms2\n')
@@ -133,8 +137,10 @@ return
   title('Log10 of Wronskian error -- mc1 ms2')
   caxis([-20 10])
   colormap default
+end
 
 
+if 0
   %-----------------------------------------------------
   % Ms1 & Mc2
   fprintf('Computing Wronskian of Ms1 & Mc2\n')
@@ -175,6 +181,7 @@ return
   title('Log10 of Wronskian error -- ms1 mc2')
   caxis([-20 10])
   colormap default
+end
 
 
 end

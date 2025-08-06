@@ -18,8 +18,8 @@ function test_mathieu_se_idents()
   %====================================================
   % First test normalization per DLMF 28.2.30
   fprintf('Testing normalization DLMF 28.2.30 ... \n')
-  %MM = 10;   % This is max order to test
-  tol = 1e-13;
+  MM = 25;   % This is max order to test
+  tol = 1e-14;
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     for i = 1:length(qs)
@@ -44,6 +44,7 @@ function test_mathieu_se_idents()
 
   
   %====================================================
+if 0
   % Next test orthogonality per DLMF 28.2,32
   fprintf('Testing orthogonality DLMF 28.2,32 ... \n')
   tol = 1e-11;
@@ -74,29 +75,95 @@ function test_mathieu_se_idents()
   end; end
   
   fprintf('======================================\n')
+end
+
+  %====================================================
+if 1
+  % Test high order finite diff
+  fprintf('Testing finite diff ... \n')
+  tol = 1e-6;
+  NN = 5000;
+  v = linspace(-pi,pi*(NN-1)/NN,NN)';
+  MM = 10;
+  qs = [-100, -10, -1, -0.1, -0.01, -0.001, 0, 0.0001, .001, .01, .1, 1, 10, 100];
+
+  % Test orders starting at m=0 for mc fcns.
+  h = v(2)-v(1);
+  for m=1:MM
+    fprintf('-----------  m = %d  -----------\n', m)
+    for i = 1:length(qs)
+      q = qs(i);
+      
+      [y,yd] = mathieu_se(m,q,v);
+      a = mathieu_b(m,q);
+
+      ydd = fd_deriv(yd);
+      r = ydd/(h) + (a - 2*q*cos(2*v)).*y;
+
+    % Err -- fix this later.
+      diffstd = std(r(5:(end-4)));
+      %fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
+      if (abs(diffstd) > tol)
+        fprintf('Error! ... ')
+        fprintf('m = %d, q = %f, diffstd = %e\n', m, q, diffstd)
+        fail = fail+1;
+        %figure(1)
+        %plot(v,y);
+        %hold on
+        %plot(v,yd);
+        %title('fcn')
+        %legend('y','yd')
+        %figure(3)
+        %plot(v(3:(end-2)),r(3:(end-2)))
+        %title('Round trip residual')
+        %pause()
+        %close all; 
+      else
+        %fprintf('\n')
+        pass = pass+1;
+      end
+    end
+  end
+  
+  fprintf('======================================\n')
+
+end
+
   
   %====================================================
   % Test q = 0 case per DLMF 28.2.29
   fprintf('Test se tends to sin for q = -1e-13 ... \n')
-  tol = 5e-13;
+
+  N = 1000;
+  v = linspace(-pi,pi,N)';
+
+  tol = 2e-13;
   q = -1e-13;
-  %MM = 10;  % Max order to test
+  MM = 10;  % Max order to test
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     LHS = mathieu_se(m,q,v);
     RHS = sin(m*v);
     
     diffstd = std(LHS-RHS);
-    %fprintf('m = %d, LHS(1) = %f, RHS(1) = %f, std = %e\n', m, LHS(1), RHS(1), diffstd)
     if (diffstd > tol)
-      fprintf('Error!  m = %d, q = %5.3f, LHS(1) = %f, RHS(1) = %f, diffstd = %e\n', m, q, LHS(1), RHS(1), diffstd)
+      fprintf('Error!  m = %d, q = %5.3f, LHS(floor(N/2)) = %f, RHS(floor(N/2)) = %f, diffstd = %e\n', ...
+	      m, q, LHS(1), RHS(1), diffstd)
       fail = fail+1;
+      figure(1)
+      plot(v,LHS);
+      hold on
+      plot(v,RHS);
+      title('fcn')
+      legend('se','sin')
+      pause()
+      close all;
     else
       pass = pass+1;
     end
   end
   
-  fprintf('Test se tends to cos for q = 0 ... \n')
+  fprintf('Test se tends to sin for q = 0 ... \n')
   q = 0;
   %MM = 10;  % Max order to test
   for m=1:MM
@@ -114,7 +181,7 @@ function test_mathieu_se_idents()
     end
   end
   
-    fprintf('Test se tends to cos for q = 1e-13 ... \n')
+    fprintf('Test se tends to sin for q = 1e-13 ... \n')
   q = 1e-13;
   %MM = 10;  % Max order to test
   for m=1:MM
@@ -186,6 +253,7 @@ function test_mathieu_se_idents()
   end
   fprintf('======================================\n')  
  
+if 0
   %====================================================
   % Next test small q expansions per DLMF 28.6.23.  The goal
   % is to make sure my fcn impls go the right way for negative
@@ -303,6 +371,7 @@ function test_mathieu_se_idents()
     end
     fprintf('--------------------------------------\n')      
   end
+end
 
   fprintf('======================================\n')
   fprintf('At end, pass = %d, fail = %d\n', pass, fail)

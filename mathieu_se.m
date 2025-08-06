@@ -23,50 +23,73 @@ function [se, sed] = mathieu_se(m, q, v)
     %fprintf('Even Mathieu se, m = %d\n', m)    
 
     B = mathieu_coeffs_oe(N,(q),m);
-    s = ones(size(B));
-    % sum on 2, 4, 6, 8 ... sum pos and neg terms separately for stability
+
     sep = zeros(size(v));
     sem = zeros(size(v));
     sedm = zeros(size(v));
     sedp = zeros(size(v));
+    
+    % sum on 2, 4, 6, 8 ... sum pos and neg terms separately for stability
     for k=N:-1:1
-      if (s(k)<0)
-        sem = sem + s(k)*B(k)*sin(2*k*v);
-	sedm = sedm + 2*k*B(k)*cos(2*k*v);
+      t = B(k)*sin(2*k*v);
+      td = 2*k*B(k)*cos(2*k*v);
+      if (t<0)
+        sem = sem + t;
       else
-        sep = sep + s(k)*B(k)*sin(2*k*v);
-	sedp = sedp + 2*k*B(k)*cos(2*k*v);
+        sep = sep + t;
+      end
+      if (td<0)
+        sedm = sedm + td;
+      else
+        sedp = sedp + td;
       end
     end
-    se = sep-sem;
-    sed = sedp-sedm;
+    % I should do a sort before doing the sum
+    se = sep+sem;
+    sed = sedp+sedm;
     % Hack -- make sure deriv is positive at v = 0.
-    s = sign(sum(s.*B));
-    se = s*se;
-    sed = s*sed;
+    s = ones(size(B));
+    %if (q<0)
+    %  if (mod(m-1,4) < tol)
+    %    s(2:2:end) = -1;
+    %  else
+    %    s(1:2:end) = -1;
+    %  end
+    %end
+    ss = sign(sum(s.*B));
+    se = ss.*se;
+    sed = ss.*sed;
     
   else
     % Odd
     % fprintf('Odd Mathieu se, m = %d\n', m)
     B = mathieu_coeffs_oo(N,(q),m);
-    s = ones(size(B));
-    % sum on 1, 3, 5, 7, ... sum pos and neg terms separately for stability
+
     sep = zeros(size(v));
     sem = zeros(size(v));
     sedp = zeros(size(v));
     sedm = zeros(size(v));    
+    % sum on 1, 3, 5, 7, ... sum pos and neg terms separately for stability
     for k=(N-1):-1:0
-      if (s(k+1)<0)
-        sem = sem + s(k+1)*B(k+1)*sin((2*k+1)*v);
-	sedm = sedm + (2*k+1)*B(k+1)*cos((2*k+1)*v);
+      t = B(k+1)*sin((2*k+1)*v);
+      td = (2*k+1)*B(k+1)*cos((2*k+1)*v);
+      if (t<0)
+        sem = sem + t;
       else
-        sep = sep + s(k+1)*B(k+1)*sin((2*k+1)*v);
-	sedp = sedp + (2*k+1)*B(k+1)*cos((2*k+1)*v);
+        sep = sep + t;
+      end
+    
+      if (td<0)
+        sedm = sedm + td;
+      else
+        sedp = sedp + td;
       end
     end
-    se = sep-sem;
-    sed = sedp-sedm;
+    se = sep+sem;
+    sed = sedp+sedm;
+    
     % Hack -- make sure deriv is positive at v = 0 for q<0.
+    s = ones(size(B));
     if (q<0)
       if (mod(m-1,4) < tol)
         s(2:2:end) = -1;
@@ -74,9 +97,9 @@ function [se, sed] = mathieu_se(m, q, v)
         s(1:2:end) = -1;
       end
     end
-    s = sign(sum(s.*B));
-    se = s*se;
-    sed = s*sed;
+    ss = sign(sum(s.*B));
+    se = ss.*se;
+    sed = ss.*sed;
   end
 
 end

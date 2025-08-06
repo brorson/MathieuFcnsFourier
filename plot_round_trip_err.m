@@ -7,12 +7,13 @@ function plot_round_trip_err()
   NN = 3000;  % More pts => smaller h, more accurate test.
               % But at some point the accuracy turns around ...
 	      % not sure why.
-  MM = 35;  % Max order to test.
 
-if 0
+
+if 1
   %========================================================
   %-----------------------------------------------------
   % ce
+  MM = 100;  % Max order to test.
   v = linspace(-pi,pi*(NN-1)/NN,NN)';
   h = v(2)-v(1);
 
@@ -61,10 +62,11 @@ if 0
   colormap default
 end
 
-if 0
+if 1
   %========================================================
   %-----------------------------------------------------
   % se
+  MM = 100;  % Max order to test.
   v = linspace(-pi,pi*(NN-1)/NN,NN)';
   h = v(2)-v(1);
 
@@ -117,8 +119,9 @@ if 1
   %========================================================
   %-----------------------------------------------------
   % modmc1
-  NN = 100;
-  v = linspace(0,5,NN)';
+  MM = 50;  % Max order to test.
+  NN = 100;  % Number of pts to sample in domain
+  v = linspace(2,5,NN)';
   h = 1e-4;
 
   % Parameters to vary
@@ -194,8 +197,9 @@ if 1
   % modmc2
   % Fcn is singular at v = 0;  Therefore, start comparison
   % at v = 1.
-  NN = 100;
-  v = linspace(2,7,NN)';  
+  MM = 50;   % Max order to test.
+  NN = 100;  % Number of pts to sample in domain
+  v = linspace(2,5,NN)';  
   h = 1e-4;
 
   % Parameters to vary

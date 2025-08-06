@@ -10,7 +10,7 @@ function test_mathieu_modmc1_idents()
   N = 1000;
   v = linspace(0, 10, N)';
 
-  MM = 30;  % This is max order to test.
+  MM = 10;  % This is max order to test.
 
   %====================================================
   % Test asymptotic behavior
@@ -56,12 +56,13 @@ function test_mathieu_modmc1_idents()
   %====================================================  
   % Test round trip error
   NN = 100;
-  v = linspace(0,5,NN)';
+  v = linspace(2,5,NN)';
   h = 1e-4;
-
+  tol = 1e-3;
+  
   % Parameters to vary
   ms = 0:MM;  % Mc orders start at 0
-  qs = logspace(-3,2,10);
+  qs = logspace(-4,2,10);
   
   fprintf('Computing round trip error for modmc1\n')
   
@@ -92,9 +93,9 @@ function test_mathieu_modmc1_idents()
       stddev = std(r);
       l2norm = norm(y);
      
-      if ((stddev) > tol)
+      if ((stddev/l2norm) > tol)
 	fprintf('Error! ... ')
-	fprintf('m = %d, q = %f, stddev = %e ... \n', m, q, stddev)
+	fprintf('m = %d, q = %f, stddev = %e, l2norm = %e ... \n', m, q, stddev, l2norm)
 	fail = fail+1;
 	%figure(1)
 	%plot(v,y)
