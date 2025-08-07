@@ -9,7 +9,7 @@ function test_mathieu_modmc2_idents()
   
   N = 1000;
 
-  MM = 10;  % This is max order to test.
+  MM = 20;  % This is max order to test.
 
   %====================================================
   % Test asymptotic behavior

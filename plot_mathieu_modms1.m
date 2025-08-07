@@ -3,7 +3,7 @@ function plot_mathieu_modms1()
     
   q = 1;
 
-  v = linspace(0,5,5000);
+  v = linspace(0,5,1000)';
 
   leg = {};
   
@@ -39,12 +39,9 @@ function plot_mathieu_modms1()
 
   figure(3)
   m=1;
-  u = linspace(0,2.5,100);
+  u = linspace(0,2.5,100)';
   for q = 1:3
-    % I change sign to match the Guitarrez paper.
-    % That said, I don't know what normalization they used,
-    % so my plot doesn't exactly match theirs.
-    y = -mathieu_modms1(m,q,u);
+    y = mathieu_modms1(m,q,u);
     plot(u,y)
     hold on
   end
@@ -56,14 +53,10 @@ function plot_mathieu_modms1()
   figure(4)
   m=5;
   N = 10000;
-  u = linspace(0,5,N);
+  u = linspace(0,5,N)';  % Be sure to do calls using col vectors.
   q = 1;
   yj = besselj(m,2*sqrt(q)*cosh(u));
   ym = mathieu_modms1(m,q,u);
-  % I need to change sign to match the Bessel fcn.
-  %if (sign(ym(end)) ~= sign(yj(end)))
-  %  ym = -ym;
-  %end
   
   plot(u,yj)
   hold on

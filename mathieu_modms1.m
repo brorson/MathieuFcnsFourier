@@ -21,18 +21,19 @@ function [Ms,Msd] = mathieu_modms1(m, q, u)
   end
 
     % Set offset used in Bessel fcn depending upon order m.
-  % This is per the book "Accurately Calculating Mathieu Functions",
-  % XXXXX & YYYY
-  if ((m>5 && q<1) || (m>14 && q<30) || (m>26 && q<100)  )
-    c = floor(m/2);
+  % This is per the book "Accurate Computation of Mathieu Functions",
+  % Malcolm M. Bibby & Andrew F. Peterson.
+  if ( (m>10 && q<.1) || (m>20 && q<100) )
+    c = floor((m-1)/2);
   else
     c = 0;
   end
+%c = 0;
 
     
   % I find the peak Fourier coeff tracks m.  Therefore
   % I adjust the matrix size based on order m.
-  N = m+10;
+  N = m+25;
 
   % Utility vars.
   sqq = sqrt(q);
@@ -46,54 +47,150 @@ function [Ms,Msd] = mathieu_modms1(m, q, u)
     % Even
     %fprintf('Even Mathieu Ms(1), m = %d\n', m)
     B = mathieu_coeffs_oe(N,q,m);
-    Ms = 0;
-    Msd = 0;
+    Msp = zeros(size(u));
+    Msm = zeros(size(u));
+    Msdp = zeros(size(u));
+    Msdm = zeros(size(u));
     for k=(N-1):-1:0
-      Jks = besselj(k,s);
-      Jkp2t = besselj(k+2,t);
-      Jkp2s = besselj(k+2,s);
-      Jkt = besselj(k,t);
+      if (c==0)
+        Jks = besselj(k,s);
+        Jkp2t = besselj(k+2,t);
+        Jkp2s = besselj(k+2,s);
+        Jkt = besselj(k,t);
+  
+        Jdks = besseljd(k,s);
+        Jdkp2t = besseljd(k+2,t);
+        Jdkp2s = besseljd(k+2,s);
+        Jdkt = besseljd(k,t);
+  
+	      % I don't use the (-1)^n idiom.  Instead I just either add or subtract
+	      % terms directly.  The goal is to minimize catastrophic cancellation
+	      % by summing pos with pos and neg with neg.  Then I subtract
+	      % the whole thing below.
+        if (mod(k,2) == 0)
+          % Pos terms
+          Msp = Msp + B(k+1).*(Jks.*Jkp2t - Jkp2s.*Jkt);
+          Msdp = Msdp + B(k+1)*...
+	        (exp(u).*(Jks.*Jdkp2t - Jkp2s.*Jdkt) - ...
+	         exp(-u).*(Jdks.*Jkp2t - Jdkp2s.*Jkt));
+        else
+          Msm = Msm + B(k+1).*(Jks.*Jkp2t - Jkp2s.*Jkt);
+          Msdm = Msdm + B(k+1)*...
+	        (exp(u).*(Jks.*Jdkp2t - Jkp2s.*Jdkt) - ...
+	         exp(-u).*(Jdks.*Jkp2t - Jdkp2s.*Jkt));
+        end
+      else  % if (c==0)
+        % Adaptive calc
+        Jkmcs = besselj(k-c,s);
+        Jkpct = besselj(k+c+2,t);
+        Jkpcs = besselj(k+c+2,s);
+        Jkmct = besselj(k-c,t);
 
-      Jdks = besseljd(k,s);
-      Jdkp2t = besseljd(k+2,t);
-      Jdkp2s = besseljd(k+2,s);
-      Jdkt = besseljd(k,t);
+        Jdkmcs = besseljd(k-c,s);
+        Jdkpct = besseljd(k+c+2,t);
+        Jdkpcs = besseljd(k+c+2,s);
+        Jdkmct = besseljd(k-c,t);
 
-      Ms = Ms + ((-1).^k).*B(k+1).*(Jks.*Jkp2t - Jkp2s.*Jkt);
-      Msd = Msd + ((-1)^k)*B(k+1)*...
-	    (exp(u).*(Jks.*Jdkp2t - Jkp2s.*Jdkt) - ...
-	     exp(-u).*(Jdks.*Jkp2t - Jdkp2s.*Jkt));
-    end
+        if (mod(k,2) == 0)
+          % Even plus terms
+          Msp = Msp + B(k+1)*(Jkmcs.*Jkpct - Jkpcs.*Jkmct);
+          Msdp = Msdp + B(k+1)* ...
+            (exp(u).*(Jkmcs.*Jdkpct - Jkpcs.*Jdkmct) - ...
+            exp(-u).*(Jdkmcs.*Jkpct - Jdkpcs.*Jkmct));
+        else
+          % Odd negative terms
+          Msm = Msm + B(k+1)*(Jkmcs.*Jkpct - Jkpcs.*Jkmct);
+          Msdm = Msdm + B(k+1)* ...
+            (exp(u).*(Jkmcs.*Jdkpct - Jkpcs.*Jdkmct) - ...
+            exp(-u).*(Jdkmcs.*Jkpct - Jdkpcs.*Jkmct));
+        end
+      end
+
+    end  % for k = ...
+    % Subtract for now.
+    % Later implement sort and sum, or Kahan summation if needed.
+    Ms = Msp - Msm;
+    %fprintf('Msp = %e, Msm = %e, Ms = %e\n', Msp, Msm, Ms)    
+    Msd = Msdp - Msdm;
+
     % Do normalization.
     sgn = (m-2)/2;
-    Ms = (((-1)^sgn)/B(1))*Ms;    
-    Msd = sqrt(q)*(((-1)^sgn)/B(1))*Msd; 
+    Ms = (((-1)^sgn)/B(c+1))*Ms;
+    Msd = sqrt(q)*(((-1)^sgn)/B(c+1))*Msd;
+
+
   else
     % Odd
     %fprintf('Odd Mathieu Ms(1), m = %d\n', m)
     B = mathieu_coeffs_oo(N,q,m);
-    Ms = 0;
-    Msd = 0;    
-    for k=(N-1):-1:0    
-      Jks = besselj(k,s);
-      Jkt = besselj(k,t);
-      Jkp1s = besselj(k+1,s);
-      Jkp1t = besselj(k+1,t);
+    Msp = zeros(size(u));
+    Msm = zeros(size(u));
+    Msdp = zeros(size(u));
+    Msdm = zeros(size(u));   
+    for k=(N-1):-1:0   
+      if (c==0)
+        Jks = besselj(k,s);
+        Jkt = besselj(k,t);
+        Jkp1s = besselj(k+1,s);
+        Jkp1t = besselj(k+1,t);
+  
+        Jdks = besseljd(k,s);
+        Jdkt = besseljd(k,t);
+        Jdkp1s = besseljd(k+1,s);
+        Jdkp1t = besseljd(k+1,t);
+  
+        if (mod(k,2) == 0)
+          % Pos terms
+          Msp = Msp + B(k+1).*(Jks.*Jkp1t - Jkp1s.*Jkt);
+          Msdp = Msdp + B(k+1)*...
+	              (exp(u).*(Jks.*Jdkp1t - Jkp1s.*Jdkt) - ...
+	              exp(-u).*(Jdks.*Jkp1t - Jdkp1s.*Jkt));
+        else
+          % Neg terms
+          Msm = Msm + B(k+1).*(Jks.*Jkp1t - Jkp1s.*Jkt);
+          Msdm = Msdm + B(k+1)*...
+	              (exp(u).*(Jks.*Jdkp1t - Jkp1s.*Jdkt) - ...
+	              exp(-u).*(Jdks.*Jkp1t - Jdkp1s.*Jkt));
+        end
 
-      Jdks = besseljd(k,s);
-      Jdkt = besseljd(k,t);
-      Jdkp1s = besseljd(k+1,s);
-      Jdkp1t = besseljd(k+1,t);
+      else % if (c==0)
+        % Adaptive calc
+        Jkmcs = besselj(k-c,s);
+        Jkpcs = besselj(k+c+1,s);
+        Jkpct = besselj(k+c+1,t);
+        Jkmct = besselj(k-c,t);
 
-      Ms = Ms + ((-1).^k).*B(k+1).*(Jks.*Jkp1t - Jkp1s.*Jkt);
-      Msd = Msd + ((-1)^k)*B(k+1)*...
-	    (exp(u).*(Jks.*Jdkp1t - Jkp1s.*Jdkt) - ...
-	     exp(-u).*(Jdks.*Jkp1t - Jdkp1s.*Jkt));
-    end
+        Jdkmcs = besseljd(k-c,s);
+        Jdkpcs = besseljd(k+c+1,s);
+        Jdkpct = besseljd(k+c+1,t);
+        Jdkmct = besseljd(k-c,t);
+
+        if (mod(k,2) == 0)
+          % Even plus terms
+          Msp = Msp + B(k+1)*(Jkmcs.*Jkpct - Jkpcs.*Jkmct);
+          Msdp = Msdp + B(k+1)* ...
+	          (exp(u).*(Jkmcs.*Jdkpct - Jkpcs.*Jdkmct) - ...
+	          exp(-u).*(Jdkmcs.*Jkpct - Jdkpcs.*Jkmct) ) ;
+        else
+          % Odd minus terms
+          Msm = Msm + B(k+1)*(Jkmcs.*Jkpct - Jkpcs.*Jkmct);
+          Msdm = Msdm + B(k+1)* ...
+	          (exp(u).*(Jkmcs.*Jdkpct - Jkpcs.*Jdkmct) - ...
+	          exp(-u).*(Jdkmcs.*Jkpct - Jdkpcs.*Jkmct) ) ;
+        end
+      end
+
+    end  % for k = ...
+    % Subtract for now.
+    % Later implement sort and sum, or Kahan summation if needed.
+    Ms = Msp - Msm;
+    %fprintf('Msp = %e, Msm = %e, Ms = %e\n', Msp, Msm, Ms)    
+    Msd = Msdp - Msdm;
+
     % Do normalization.
     sgn = (m-1)/2;
-    Ms = (((-1)^sgn)/B(1))*Ms;    
-    Msd = sqrt(q)*(((-1)^sgn)/B(1))*Msd; 
+    Ms = (((-1)^sgn)/B(c+1))*Ms;    
+    Msd = sqrt(q)*(((-1)^sgn)/B(c+1))*Msd; 
   end
 
   % At this point, fcns should be properly normalized.

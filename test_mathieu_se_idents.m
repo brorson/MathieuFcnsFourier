@@ -34,7 +34,7 @@ function test_mathieu_se_idents()
 	      fprintf('Error!  m = %d, q = %f, diff = %e\n', m, q, diff)
 	      fail = fail+1;
       else
-	pass = pass+1;
+	      pass = pass+1;
       end
       
     end

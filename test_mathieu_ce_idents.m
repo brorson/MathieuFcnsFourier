@@ -110,13 +110,13 @@ if 1
         fprintf('Error! ... ')
         fprintf('m = %d, q = %f, diffstd = %e\n', m, q, diffstd)
         fail = fail+1;
-	%figure(1)
-	%plot(v,y);
-	%hold on
-	%plot(v,yd);
-	%title('fcn')
-	%legend('y','yd')
-	%figure(3)
+	      %figure(1)
+	      %plot(v,y);
+	      %hold on
+	      %plot(v,yd);
+	      %title('fcn')
+	      %legend('y','yd')
+	      %figure(3)
         %plot(v(3:(end-2)),r(3:(end-2)))
         %title('Round trip residual')
         %pause()

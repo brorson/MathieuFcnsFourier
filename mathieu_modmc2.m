@@ -18,8 +18,8 @@ function [Mc,Mcd] = mathieu_modmc2(m, q, u)
   end
 
   % Set offset used in Bessel fcn depending upon order m.
-  % This is per the book "Accurately Calculating Mathieu Functions",
-  % XXXXX & YYYY
+  % This is per the book  "Accurate Computation of Mathieu Functions",
+  % Malcolm M. Bibby & Andrew F. Peterson.
   if ( (m>10 && q<.1) || (m>20 && q<100) )
     c = floor(m/2);
   else

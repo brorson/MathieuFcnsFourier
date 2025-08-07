@@ -22,8 +22,9 @@ function [Ms,Msd] = mathieu_modms2(m, q, u)
 
  
   % Set offset used in Bessel fcn depending upon order m.
-  % This is per the book "Accurately Calculating Mathieu Functions",
-  % XXXXX & YYYY
+  % This is per the book "Accurate Computation of Mathieu Functions",
+  % Malcolm M. Bibby & Andrew F. Peterson.
+
   c = 2;
   
     

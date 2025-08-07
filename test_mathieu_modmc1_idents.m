@@ -7,10 +7,8 @@ function test_mathieu_modmc1_idents()
     
   qs = [.001, .01, .1, 1, 10, 100];
   
-  N = 1000;
-  v = linspace(0, 10, N)';
-
-  MM = 10;  % This is max order to test.
+  N = 200;  % Number of sample pts in v domain.
+  MM = 20;  % This is max order to test.
 
   %====================================================
   % Test asymptotic behavior
@@ -30,22 +28,22 @@ function test_mathieu_modmc1_idents()
 
       diffstd = std(modmc1 - j);
       if (abs(diffstd) > tol)
-	fprintf('Error! ... ')
-	fprintf('m = %d, q = %f, diffstd = %e ... \n', m, q, diffstd)
-	fail = fail+1;
-	figure(1)
-	plot(v,modmc1)
-	hold on
-	plot(v,j)
-	title('modmc1 vs. besselj')
-	legend('modmc1','besselj')
-	figure(2)
-	plot(v,modmc1-j)
-	title('Difference modmc1 - j')
-	pause()
-	close all; 
+	      fprintf('Error! ... ')
+	      fprintf('m = %d, q = %f, diffstd = %e ... \n', m, q, diffstd)
+	      fail = fail+1;
+	      figure(1)
+	      plot(v,modmc1)
+	      hold on
+	      plot(v,j)
+	      title('modmc1 vs. besselj')
+	      legend('modmc1','besselj')
+	      figure(2)
+	      plot(v,modmc1-j)
+	      title('Difference modmc1 - j')
+	      pause()
+	      close all; 
       else
-	pass = pass+1;
+	      pass = pass+1;
       end
       
     end
@@ -94,22 +92,22 @@ function test_mathieu_modmc1_idents()
       l2norm = norm(y);
      
       if ((stddev/l2norm) > tol)
-	fprintf('Error! ... ')
-	fprintf('m = %d, q = %f, stddev = %e, l2norm = %e ... \n', m, q, stddev, l2norm)
-	fail = fail+1;
-	%figure(1)
-	%plot(v,y)
-	%hold on
-	%plot(v,yd)
-	%title('modmc1 & deriv')
-	%legend('y','yd')
-	%figure(2)
-	%plot(v,r)
-	%title('Residual')
-	%pause()
-	%close all; 
+	      fprintf('Error! ... ')
+	      fprintf('m = %d, q = %f, stddev = %e, l2norm = %e ... \n', m, q, stddev, l2norm)
+	      fail = fail+1;
+	      %figure(1)
+	      %plot(v,y)
+	      %hold on
+	      %plot(v,yd)
+	      %title('modmc1 & deriv')
+	      %legend('y','yd')
+	      %figure(2)
+	      %plot(v,r)
+	      %title('Residual')
+	      %pause()
+	      %close all; 
       else
-	pass = pass+1;
+	      pass = pass+1;
       end
      
     end

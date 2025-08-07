@@ -18,8 +18,8 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
   end
  
   % Set offset used in Bessel fcn depending upon order m.
-  % This is per the book "Accurately Calculating Mathieu Functions",
-  % XXXXX & YYYY
+  % This is per the book "Accurate Computation of Mathieu Functions",
+  % Malcolm M. Bibby & Andrew F. Peterson.
   if ( (m>10 && q<.1) || (m>20 && q<100) )
     c = floor(m/2);
   else
@@ -50,27 +50,29 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
     for k=(N-1):-1:0
     %for k=0:(N-1)
       if (c==0)
+        % Non-adaptive calc
         Jks = besselj(k,s);
         Jkt = besselj(k,t);
 
         Jdks = besseljd(k,s);
         Jdkt = besseljd(k,t);
 
-	% I don't use the (-1)^n idiom.  Instead I just either add or subtract
-	% terms directly.  The goal is to minimize catastrophic cancellation
-	% by summing pos with pos and neg with neg.  Then I subtract
-	% the whole thing below.
+	      % I don't use the (-1)^n idiom.  Instead I just either add or subtract
+	      % terms directly.  The goal is to minimize catastrophic cancellation
+	      % by summing pos with pos and neg with neg.  Then I subtract
+	      % the whole thing below.
         if (mod(k,2) == 0)
-          % Additive terms
+          % Pos terms
           Mcp = Mcp + A(k+1)*(Jks.*Jkt);
           Mcdp = Mcdp + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt);
          else
-          % Subtractive terms.
+          % Neg terms.
           Mcm = Mcm + A(k+1)*(Jks.*Jkt);
           Mcdm = Mcdm + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt);
         end
 
-      else
+      else  % if (c==0)
+        % Adaptive calc
         Jkmcs = besselj(k-c,s);
         Jkpcs = besselj(k+c,s);
         Jkpct = besselj(k+c,t);
@@ -117,6 +119,7 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
     Mcdm = zeros(size(u));
     for k=(N-1):-1:0
       if (c==0)
+        % Non-adaptive calc
         Jks = besselj(k,s);
         Jkp1s = besselj(k+1,s);
         Jkt = besselj(k,t);
@@ -141,7 +144,8 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
 	          exp(-u).*(Jdks.*Jkp1t + Jdkp1s.*Jkt) ) ;
         end
 
-      else
+      else  % if (c==0)
+        % Adaptive calc
         Jkmcs = besselj(k-c,s);
         Jkpcs = besselj(k+c+1,s);
         Jkpct = besselj(k+c+1,t);
