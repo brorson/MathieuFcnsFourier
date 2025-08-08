@@ -16,6 +16,7 @@ if 1
   %-----------------------------------------------------
   % Mc1 & Mc2
   fprintf('Computing Wronskian of Mc1 & Mc2\n')
+
   % Matrix of error values.
   errs = zeros(length(ms),length(qs));
   X = zeros(size(errs));
@@ -52,13 +53,10 @@ if 1
 end
 
 
-if 0
+if 1
   %-----------------------------------------------------
   % Ms1 & Ms2
   fprintf('Computing Wronskian of Ms1 & Ms2\n')
-
-  % Ms supports orders 1, 2, 3, ...
-  ms = 1:21;
 
   % Matrix of error values.
   errs = zeros(length(ms),length(qs));
@@ -96,13 +94,10 @@ if 0
 end
 
 
-if 0
+if 1
   %-----------------------------------------------------
   % Mc1 & Ms2
   fprintf('Computing Wronskian of Mc1 & Ms2\n')
-
-  % Ms supports orders 1, 2, 3, ...
-  ms = 1:21;
 
   % Matrix of error values.
   errs = zeros(length(ms),length(qs));
@@ -140,13 +135,10 @@ if 0
 end
 
 
-if 0
+if 1
   %-----------------------------------------------------
   % Ms1 & Mc2
   fprintf('Computing Wronskian of Ms1 & Mc2\n')
-
-  % Ms supports orders 1, 2, 3, ...
-  ms = 1:21;
 
   % Matrix of error values.
   errs = zeros(length(ms),length(qs));

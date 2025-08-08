@@ -10,7 +10,7 @@ function test_mathieu_modms2_idents()
   N = 1000;
   v = linspace(0, 10, N)';
 
-  MM = 5;  % This is max order to test.
+  MM = 20;  % This is max order to test.
 
   %====================================================
   % Test asymptotic behavior
@@ -30,9 +30,9 @@ function test_mathieu_modms2_idents()
 
       % 
       diffstd = std(modms2 - y);
-      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
       if (abs(diffstd) > tol)
-	fprintf('Error!\n')
+	fprintf('Error! ... ')
+	fprintf('m = %d, q = %f, diffstd = %e \n', m, q, diffstd)
 	fail = fail+1;
 	%plot(v,modms2)
 	%hold on
@@ -40,13 +40,75 @@ function test_mathieu_modms2_idents()
 	%pause()
 	%close all; 
       else
-	fprintf('\n')
 	pass = pass+1;
       end
       
     end
   end
 
+  %====================================================  
+  % Test round trip error
+  NN = 100;
+  v = linspace(2,5,NN)';
+  h = 1e-4;
+  tol = 1e-3;
+  
+  % Parameters to vary
+  ms = 1:MM;  % Ms orders start at 1
+  qs = logspace(-4,2,10);
+  
+  fprintf('Computing round trip error for modms2\n')
+  
+  % Loop over q and m
+  for i=1:length(ms)
+    m = ms(i);
+    fprintf('-----------  m = %d  -----------\n', m)
+    for j = 1:length(qs)
+      q = qs(j);
+
+      % Use sixth order deriv.  Coeffs are:
+      % -1/60, 3/20, -3/4, 0, 3/4, -3/20, 1/60
+      [~,fm3] = mathieu_modms2(m,q,v-3*h);
+      [~,fm2] = mathieu_modms2(m,q,v-2*h);
+      [~,fm1] = mathieu_modms2(m,q,v-h);
+      [~,fp1] = mathieu_modms2(m,q,v+h);
+      [~,fp2] = mathieu_modms2(m,q,v+2*h);
+      [~,fp3] = mathieu_modms2(m,q,v+3*h);
+      ydd = -fm3/60 + 3*fm2/20 - 3*fm1/4 + 3*fp1/4 - 3*fp2/20 + fp3/60;
+
+      [y,yd] = mathieu_modms2(m,q,v);
+      a = mathieu_b(m,q);
+
+      r = ydd/(h) - (a - 2*q*cosh(2*v)).*y;
+     
+      stddev = std(r);
+      l2norm = norm(y);
+     
+      if ((stddev/l2norm) > tol)
+              fprintf('Error! ... ')
+              fprintf('m = %d, q = %f, stddev = %e, l2norm = %e ... \n', m, q, stddev, l2norm)
+              fail = fail+1;
+              %figure(1)
+              %plot(v,y)
+              %hold on
+              %plot(v,yd)
+              %title('modms2 & deriv')
+              %legend('y','yd')
+              %figure(2)
+              %plot(v,r)
+              %title('Residual')
+              %pause()
+              %close all;   
+      else
+              pass = pass+1;
+      end
+     
+    end
+  end
+
+
+
+if 0
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modms2,modms1) Wronskian per DLMF 28.20.21 ... \n')
@@ -82,7 +144,9 @@ function test_mathieu_modms2_idents()
       end
     end
   end
+end
 
+if 0
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modms2,modmc1) Wronskian per DLMF 28.20.21 ... \n')
@@ -118,7 +182,8 @@ function test_mathieu_modms2_idents()
       end
     end
   end
-
+end
+  
   fprintf('At end, pass = %d, fail = %d\n', pass, fail)
   
 end

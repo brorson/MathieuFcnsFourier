@@ -27,7 +27,6 @@ function test_mathieu_modmc2_idents()
       sqq = sqrt(q);
       y = bessely(m,2*sqq*cosh(v));
 
-
       diffstd = std(modmc2 - y);
       if (abs(diffstd) > tol)
 	fprintf('Error! ... ')
