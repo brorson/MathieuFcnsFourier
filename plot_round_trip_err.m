@@ -4,18 +4,19 @@ function plot_round_trip_err()
 
 
 
-if 0
+if 1
   %========================================================
   %-----------------------------------------------------
   % ce
   MM = 100;  % Max order to test.
+  NN = 100;  % Number of pts to sample in domain
   v = linspace(-pi,pi*(NN-1)/NN,NN)';
   h = 5e-4;
 
   % Parameters to vary
   ms = 0:MM;  % ce orders start at 0
   qs = logspace(-4,4,30);
-  
+
   fprintf('Computing round trip error for ce\n')
   % Matrix of error values.
   errs = zeros(length(ms),length(qs));
@@ -64,11 +65,13 @@ if 0
   colormap default
 end
 
-if 0
+
+if 1
   %========================================================
   %-----------------------------------------------------
   % se
   MM = 100;  % Max order to test.
+  NN = 100;  % Number of pts to sample in domain
   v = linspace(-pi,pi*(NN-1)/NN,NN)';
   h = 5e-4;
   

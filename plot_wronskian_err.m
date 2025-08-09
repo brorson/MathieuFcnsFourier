@@ -2,7 +2,7 @@ function plot_wronskian_err()
   % This makes a contour plot of the error
 
   % Parameters to vary
-  ms = 1:30;
+  ms = 1:50;
   qs = logspace(-4,4,30);
   
   % Domain

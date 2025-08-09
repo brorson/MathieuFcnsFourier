@@ -87,7 +87,7 @@ if 1
   tol = 1e-6;
   NN = 5000;
   v = linspace(-pi,pi*(NN-1)/NN,NN)';
-  MM = 10;
+  MM = 5;
   qs = [-100, -10, -1, -0.1, -0.01, -0.001, 0, 0.0001, .001, .01, .1, 1, 10, 100];
 
   % Test orders starting at m=0 for mc fcns.
@@ -110,26 +110,24 @@ if 1
         fprintf('Error! ... ')
         fprintf('m = %d, q = %f, diffstd = %e\n', m, q, diffstd)
         fail = fail+1;
-	      %figure(1)
-	      %plot(v,y);
-	      %hold on
-	      %plot(v,yd);
-	      %title('fcn')
-	      %legend('y','yd')
-	      %figure(3)
-        %plot(v(3:(end-2)),r(3:(end-2)))
-        %title('Round trip residual')
-        %pause()
-        %close all; 
+	figure(1)
+	plot(v,y);
+	hold on
+	plot(v,yd);
+	title('fcn')
+	legend('y','yd')
+	figure(3)
+        plot(v(3:(end-2)),r(3:(end-2)))
+        title('Round trip residual')
+        pause()
+        close all; 
       else
-        %fprintf('\n')
         pass = pass+1;
       end
     end
   end
   
   fprintf('======================================\n')
-
 end
 
 

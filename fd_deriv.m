@@ -6,7 +6,7 @@ function y = fd_deriv(x)
   % first point.  Therefore, linspace(-pi,pi,N) must have the
   % right point trimmed before calling fd_deriv.
     
-  ord = 8;
+  ord = 6;
 
   if (ord == 4)
     % Fourth order expression.  Coeffs are 

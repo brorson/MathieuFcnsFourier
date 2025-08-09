@@ -2,7 +2,7 @@ function a = mathieu_a(m, q)
   % This returns the Mathieu eigenvalue ("characteristic value") 
   % for order m and   frequency parameter q.
 
-  N = max(10,2*m);
+  N = m+25;  % max(10,2*m);
     
   tol = 1e-14;
   if (abs(mod(m,2)) < tol)
