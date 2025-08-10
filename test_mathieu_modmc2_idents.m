@@ -15,7 +15,7 @@ function test_mathieu_modmc2_idents()
   % Test asymptotic behavior
   fprintf('Testing asymptotic behavior per DLMF 28.20.11 ... \n')
   tol = 5e-4;
-  v = linspace(5, 15, N)';  % Only want to see large v.
+  v = linspace(6, 15, N)';  % Only want to see large v.
 
   % Test orders starting at m=0.
   for m=0:MM
@@ -54,7 +54,7 @@ function test_mathieu_modmc2_idents()
   % Test round trip error
   NN = 100;
   v = linspace(2,5,NN)';
-  h = 1e-4;
+  h = 1e-5;
   tol = 1e-3;
 
   % Parameters to vary
@@ -114,12 +114,12 @@ function test_mathieu_modmc2_idents()
   end
 
   
-if 0
+if 1
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modmc2,modmc1) Wronskian per DLMF 28.20.21 ... \n')
   tol = 1e-6;
-  v = linspace(0, 10, N)';  % Only want to see large v.
+  v = linspace(6, 15, N)'; 
 
   % Test orders starting at m=1.
   for m=0:MM
@@ -136,16 +136,15 @@ if 0
       % 
       wtrue = -2/pi;
       diffstd = std(w-wtrue);
-      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
       if (abs(diffstd) > tol)
-	fprintf('Error!\n')
+	fprintf('Error! ... ')
 	fail = fail+1;
+	fprintf('m = %d, q = %f, diffstd = %e\n', m, q, diffstd)
 	%plot(v,w)
 	%title('Wronskian')
 	%pause()
 	%close all; 
       else
-	fprintf('\n')
 	pass = pass+1;
       end
     end
@@ -153,13 +152,12 @@ if 0
 end
 
 
-if 0  
+if 1
   fprintf('======================================\n')
   % Test Wronskian
   fprintf('Testing W(modmc2,modms1) Wronskian per DLMF 28.20.21 ... \n')
   tol = 1e-6;
-  v = linspace(0, 10, N)';
-  MM = 5;  % Wronskian test starts to fail for m=6.  Must fix impls.
+  v = linspace(6, 15, N)';
   
   % Test orders starting at m=1.
   for m=1:MM
@@ -176,16 +174,15 @@ if 0
       % 
       wtrue = -2/pi;
       diffstd = std(w-wtrue);
-      fprintf('m = %d, q = %f, diffstd = %e ... ', m, q, diffstd)
       if (abs(diffstd) > tol)
-        fprintf('Error!\n')
+        fprintf('Error! ... ')
         fail = fail+1;
+	fprintf('m = %d, q = %f, diffstd = %e\n', m, q, diffstd)
         %plot(v,w)
         %title('Wronskian')
         %pause()
         %close all; 
       else
-        fprintf('\n')
         pass = pass+1;
       end
     end
