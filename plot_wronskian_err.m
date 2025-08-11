@@ -7,7 +7,7 @@ function plot_wronskian_err()
   
   % Domain
   N = 100;
-  v = linspace(2, 5, N)';
+  v = linspace(5, 10, N)';
 
   % True value of Wronskian  
   wtrue = 2/pi;  

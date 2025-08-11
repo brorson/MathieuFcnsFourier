@@ -1,4 +1,4 @@
-function test_mathieu_se_idents()
+function [pass, fail] = test_mathieu_se_idents()
   % This checks se using a few identities.
 
   pass = 0;
@@ -266,7 +266,7 @@ if 0
   
   qs = [-1.5, -1, -.5, -.2, -.1, .1, .2, .5, 1, 1.5];
 
-  MM = 35;
+  MM = 50;
 
   % The first three orders don't work unless q is really small
   %-----------------------------------------------------------

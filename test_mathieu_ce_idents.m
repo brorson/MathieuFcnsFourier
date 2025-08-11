@@ -1,4 +1,4 @@
-function test_mathieu_ce_idents()
+function [pass, fail] = test_mathieu_ce_idents()
   % This checks ce using a few identities.
     
   pass = 0;
@@ -87,7 +87,7 @@ if 1
   tol = 1e-6;
   NN = 5000;
   v = linspace(-pi,pi*(NN-1)/NN,NN)';
-  MM = 5;
+  MM = 10;
   qs = [-100, -10, -1, -0.1, -0.01, -0.001, 0, 0.0001, .001, .01, .1, 1, 10, 100];
 
   % Test orders starting at m=0 for mc fcns.

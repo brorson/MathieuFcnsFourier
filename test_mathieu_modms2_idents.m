@@ -1,4 +1,4 @@
-function test_mathieu_modms2_idents()
+function [pass, fail] = test_mathieu_modms2_idents()
   % This checks modms2 using a few identities.
     
 

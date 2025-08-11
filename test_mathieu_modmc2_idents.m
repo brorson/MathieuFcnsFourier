@@ -1,4 +1,4 @@
-function test_mathieu_modmc2_idents()
+function [pass, fail] = test_mathieu_modmc2_idents()
   % This checks modmc2 using a few identities.
     
 

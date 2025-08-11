@@ -1,4 +1,4 @@
-function test_mathieu_modmc1_idents()
+function  [pass, fail] = test_mathieu_modmc1_idents()
   % This checks modmc1 using a few identities.
     
 
@@ -121,7 +121,6 @@ if 1
   fprintf('Testing W(modmc1,modmc2) Wronskian per DLMF 28.20.21 ... \n')
   tol = 1e-6;
   v = linspace(6, 15, N)';
-  MM = 5;  % Wronskian test starts to fail for m=6.  Must fix impls.
 
   % Test orders starting at m=0 for mc fcns.
   for m=0:MM
@@ -159,7 +158,6 @@ if 1
   fprintf('Testing W(modmc1,modms2) Wronskian per DLMF 28.20.21 ... \n')
   tol = 1e-6;
   v = linspace(6, 15, N)';
-  MM = 5;  % Wronskian test starts to fail for m=6.  Must fix impls.
   
   % Test orders starting at m=1.
   for m=1:MM
