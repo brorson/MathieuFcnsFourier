@@ -7,7 +7,7 @@ function A = mathieu_coeffs_ee(N,q,m)
     error('Must invoke ee function with even order m')
   end
   
-  M = make_matrix_ee(N+4,q);
+  M = make_matrix_ee(N,q);
   
   %fprintf('mathieu_coeffs_ee, condeig(M) = \n')
   %disp(condeig(M))

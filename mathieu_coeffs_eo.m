@@ -7,7 +7,7 @@ function A = mathieu_coeffs_eo(N,q,m)
     error('Must invoke eo function with odd order m')
   end
   
-  M = make_matrix_eo(N+4,q);
+  M = make_matrix_eo(N,q);
   
   %fprintf('mathieu_coeffs_eo, condeig(M) = \n')
   %disp(condeig(M))

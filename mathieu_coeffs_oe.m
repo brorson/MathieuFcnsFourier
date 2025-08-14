@@ -7,7 +7,7 @@ function B = mathieu_coeffs_oe(N,q,m)
     error('Must invoke oe function with even order m')
   end
   
-  M = make_matrix_oe(2*N,q);
+  M = make_matrix_oe(N,q);
   
   %[V,D] = eigs(M,N,'largestabs');
   [V,D] = eig(M);  

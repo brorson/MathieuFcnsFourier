@@ -7,7 +7,7 @@ function B = mathieu_coeffs_oo(N,q,m)
     error('Must invoke oo function with odd order m')
   end
   
-  M = make_matrix_oo(2*N,q);
+  M = make_matrix_oo(N,q);
   
   %[V,D] = eigs(M,N,'largestabs');
   [V,D] = eig(M);  
