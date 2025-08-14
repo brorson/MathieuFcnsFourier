@@ -52,13 +52,13 @@ function [ce, ced] = mathieu_ce(m, q, v)
 
     % Hack -- this makes sure the fcn has the right overall sign for q<0.
     s = ones(size(A));
-    if (q<0)
-      if (mod(m,4) < tol)
-        s(2:2:end) = -1;
-      else
-        s(1:2:end) = -1;
-      end
-    end
+    %if (q<0)
+    %  if (mod(m,4) < tol)
+    %    s(2:2:end) = -1;
+    %  else
+    %    s(1:2:end) = -1;
+    %  end
+    %end
     ss = sign(sum(s.*A));
     ce = ss.*ce;
     ced = ss.*ced;
@@ -98,13 +98,13 @@ function [ce, ced] = mathieu_ce(m, q, v)
 
     % Hack -- this makes sure the fcn has the right overall sign for q<0.
     s = ones(size(A));
-    if (q<0)
-      if (mod(m-1,4) < tol)
-        s(2:2:end) = -1;
-      else
-        s(1:2:end) = -1;
-      end
-    end
+    %if (q<0)
+    %  if (mod(m-1,4) < tol)
+    %    s(2:2:end) = -1;
+    %  else
+    %    s(1:2:end) = -1;
+    %  end
+    %end
     ss = sign(sum(s.*A));
     ce = ss*ce;
     ced = ss*ced;

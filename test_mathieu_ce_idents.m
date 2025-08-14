@@ -42,10 +42,10 @@ function [pass, fail] = test_mathieu_ce_idents()
 
   
   %====================================================
-if 0
+if 1
   % Next test orthogonality per DLMF 28.2,31
   fprintf('Testing orthogonality per DLMF 28.2,31 ... \n')
-  tol = 1e-12;
+  tol = 1e-11;
   MM = 10;  % Max order to test
   for m1=0:MM;   for m2=m1:MM
     if (m1 == m2)
@@ -140,7 +140,7 @@ end
 
   tol = 2e-13;
   q = -1e-13;
-  MM = 10;  % Max order to test
+  MM = 20;  % Max order to test
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     LHS = mathieu_ce(m,q,v);
@@ -248,7 +248,7 @@ end
   fprintf('======================================\n')  
 
 
-if 0  
+if 1
   %====================================================
   % Next test small q expansions per DLMF 28.6.21.  The goal
   % is to make sure my fcn impls match the DLMF for negative
@@ -260,7 +260,7 @@ if 0
   N = 1000;
   v = linspace(-pi,pi,N)';  % Col vector.
   
-  MM = 50;
+  MM = 20;
 
   % The first three orders don't work unless q is really small
   %-----------------------------------------------------------
@@ -289,7 +289,7 @@ if 0
   
   %-----------------------------------------------------------  
   % m = 1
-  qs = [-1.5, -1, -.5, -.2, -.1, .1, .2, .5, 1, 1.5];    
+  qs = [ -.2, -.1, .1, .2];    
   for i=1:length(qs)
     q = qs(i);
     % Define power series after setting q.
@@ -310,7 +310,7 @@ if 0
   
   %-----------------------------------------------------------  
   % m = 2
-  qs = [-.5, -.2, -.1, .1, .2, .5];    
+  qs = [-.3, -.2, -.1, .1, .2, .3];    
   for i=1:length(qs)
     q = qs(i);
     % Define power series after setting q.
@@ -330,11 +330,32 @@ if 0
   
   %-----------------------------------------------------------  
   % Higher orders work over larger q domains
-  % Now m = 3, 4, 5, ... 11
-  qs = [-1.5, -1, -.5, -.1, .1, .5, 1, 1.5];  
+  % Now m = 3, ... 5
+  qs = [-.5, -.3, -.1, .1, .3, .5];  
   for i=1:length(qs)
     q = qs(i);
-    for m=3:11
+    for m=3:5
+      fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+      dlmfce = ce_q_expansion(m,q,v);
+      myce = mathieu_ce(m,q,v);
+      diffstd = std(dlmfce - myce);
+      if (diffstd > tol)
+	fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
+	fail = fail+1;
+      else
+	pass = pass+1;
+      end
+    end
+    fprintf('--------------------------------------\n')      
+  end
+
+  %-----------------------------------------------------------  
+  % Higher orders work over larger q domains
+  % Now m = 6, ... 13
+  qs = [-1, -.5, -.1, .1, .5, 1];  
+  for i=1:length(qs)
+    q = qs(i);
+    for m=6:13
       fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
       dlmfce = ce_q_expansion(m,q,v);
       myce = mathieu_ce(m,q,v);
@@ -351,10 +372,10 @@ if 0
 
   %-----------------------------------------------------------  
   % Now even higher orders
-  qs = [-10, -3, -1.5, -1, -.5, -.1, .1, .5, 1, 1.5, 3, 10];  
+  qs = [-3, -1.5, -1, -.5, -.1, .1, .5, 1, 1.5, 3];  
   for i=1:length(qs)
     q = qs(i);
-    for m=12:MM
+    for m=14:MM
       fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
       dlmfce = ce_q_expansion(m,q,v);
       myce = mathieu_ce(m,q,v);

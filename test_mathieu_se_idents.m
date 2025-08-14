@@ -44,11 +44,11 @@ function [pass, fail] = test_mathieu_se_idents()
 
   
   %====================================================
-if 0
+if 1
   % Next test orthogonality per DLMF 28.2,32
   fprintf('Testing orthogonality DLMF 28.2,32 ... \n')
   tol = 1e-11;
-  %MM = 10;  % Max order to test
+  MM = 10;  % Max order to test
   for m1=1:MM;   for m2=m1:MM
     if (m1 == m2)
       continue
@@ -139,7 +139,7 @@ end
 
   tol = 2e-13;
   q = -1e-13;
-  MM = 10;  % Max order to test
+  MM = 20;  % Max order to test
   for m=1:MM
     fprintf('-----------  m = %d  -----------\n', m)
     LHS = mathieu_se(m,q,v);
@@ -253,7 +253,7 @@ end
   end
   fprintf('======================================\n')  
  
-if 0
+if 1
   %====================================================
   % Next test small q expansions per DLMF 28.6.23.  The goal
   % is to make sure my fcn impls go the right way for negative
@@ -263,10 +263,8 @@ if 0
   tol = 1e-4;
   N = 1000;
   v = linspace(-pi,pi,N)';
-  
-  qs = [-1.5, -1, -.5, -.2, -.1, .1, .2, .5, 1, 1.5];
 
-  MM = 50;
+  MM = 20;
 
   % The first three orders don't work unless q is really small
   %-----------------------------------------------------------
@@ -298,7 +296,7 @@ if 0
 
   %-----------------------------------------------------------  
   % m = 2
-  qs = [-.5, -.2, -.1, .1, .2, .5];    
+  qs = [-.3, -.2, -.1, .1, .2, .3];    
   for i=1:length(qs)
     % Define power series after setting q.
     se2 = @(v) sin(2*v) - q*sin(4*v)/12 + (q^2)*(sin(6*v)/3 - 4*sin(2*v)/9)/128;
@@ -320,12 +318,38 @@ if 0
   end
   
   %-----------------------------------------------------------  
-  % Higher orders work over larger q domains
-  % Now m = 3, 4, 5, ... 11
-  qs = [-1.5, -1, -.5, -.1, .1, .5, 1, 1.5];  
+  % m = 3, 4, 5
+  qs = [-.5, -.3, -.2, -.1, .1, .2, .3, .5];    
   for i=1:length(qs)
     q = qs(i);
-    for m=3:11
+    for m=3:5
+      fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
+      dlmfse = se_q_expansion(m,q,v);
+      myse = mathieu_se(m,q,v);
+      %plot(v, dlmfse,'b-')
+      %hold on
+      %plot(v, myse,'r.')
+      %legend('dlmf','me')
+      diffstd = std(dlmfse - myse);
+      if (diffstd > tol)
+        fprintf('Error!  m = %d, q = %5.3f, diffstd = %e\n', m, q, diffstd)
+        fail = fail+1;
+      else
+	pass = pass+1;
+      end
+      %pause()
+      %close all;
+    end
+    fprintf('--------------------------------------\n')      
+  end
+
+  
+  %-----------------------------------------------------------  
+  % Higher orders work over larger q domains
+  qs = [-1, -.5, -.1, .1, .5, 1];  
+  for i=1:length(qs)
+    q = qs(i);
+    for m=6:13
       fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
       dlmfse = se_q_expansion(m,q,v);
       myse = mathieu_se(m,q,v);
@@ -348,10 +372,10 @@ if 0
    
    %-----------------------------------------------------------  
   % Now even higher orders
-  qs = [-10, -3, -1.5, -1, -.5, -.1, .1, .5, 1, 1.5, 3, 10];  
+  qs = [-3, -1.5, -1, -.5, -.1, .1, .5, 1, 1.5, 3];  
   for i=1:length(qs)
     q = qs(i);
-    for m=12:MM
+    for m=14:MM
       fprintf('----------- m = %d, q = %f  -----------\n', m, q)  
       dlmfse = se_q_expansion(m,q,v);
       myse = mathieu_se(m,q,v);

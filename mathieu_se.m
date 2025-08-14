@@ -90,13 +90,13 @@ function [se, sed] = mathieu_se(m, q, v)
     
     % Hack -- make sure deriv is positive at v = 0 for q<0.
     s = ones(size(B));
-    if (q<0)
-      if (mod(m-1,4) < tol)
-        s(2:2:end) = -1;
-      else
-        s(1:2:end) = -1;
-      end
-    end
+    %if (q<0)
+    %  if (mod(m-1,4) < tol)
+    %    s(2:2:end) = -1;
+    %  else
+    %    s(1:2:end) = -1;
+    %  end
+    %end
     ss = sign(sum(s.*B));
     se = ss.*se;
     sed = ss.*sed;
