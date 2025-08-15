@@ -3,7 +3,7 @@ function plot_mathieu_modms1()
     
   q = 1;
 
-  v = linspace(0,5,1000)';
+  v = linspace(0,4,1000)';
 
   leg = {};
   

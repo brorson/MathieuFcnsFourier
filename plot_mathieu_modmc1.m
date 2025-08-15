@@ -1,9 +1,9 @@
 function plot_mathieu_modmc1()
   % This plots the modified Mathieu Mc fcns of first kind.
     
-  q = 30;
+  q = 1;
 
-  v = linspace(0,5,1000)';
+  v = linspace(0,4,1000)';
 
   leg = {};
   
@@ -18,7 +18,7 @@ function plot_mathieu_modmc1()
     leg = [leg, ss];
   end  
   title('Modified Mathieu of first kind Mc2n')
-  legend(leg,'Location','SouthEast')
+  legend(leg,'Location','NorthEast')
 
   leg = {};
   % Next do odd ce fcns
@@ -32,7 +32,7 @@ function plot_mathieu_modmc1()
     leg = [leg, ss];
   end  
   title('Modified Mathieu of first kind Mc2n+1')
-  legend(leg, 'Location','SouthEast')
+  legend(leg, 'Location','NorthEast')
 
   %==============================================
   % Make plots of Guitarrez paper

@@ -5,12 +5,12 @@ function plot_mathieu_ce()
   
   fprintf('Plotting Fourier series ce for q = %f\n', q)
   
-  v = linspace(-pi,pi,100);
+  v = linspace(0,pi/2,100);
 
   % First do even ce fcns
   leg = {};
   figure(1)
-  for m = 0:2:4
+  for m = 0:2:6
     %fprintf('-----------------------\n')    
     y = mathieu_ce(m,q,v);
     plot(v,y)
@@ -24,7 +24,7 @@ function plot_mathieu_ce()
   % Next do odd ce fcns
   leg = {};
   figure(2)
-  for m = 1:2:5
+  for m = 1:2:7
     %fprintf('-----------------------\n')
     y = mathieu_ce(m,q,v);
     plot(v,y)
