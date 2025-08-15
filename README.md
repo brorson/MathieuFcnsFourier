@@ -54,6 +54,10 @@ with evaluating the finite-difference derivative, so it represents an
 error ceiling, not a floor.
 <table>
   <tr>
+    <td><img src="./MathieuEigs_ZoomIn.png" alt="Mathieu eigs"></td>
+    <td><img src="./MathieuEigs_ZoomOut.png" alt="Mathieu eigs"></td>
+  </tr>
+  <tr>
     <td><img src="./RoundTripErr_ce.png" alt="Ce"></td>
     <td><img src="./RoundTripErr_se.png" alt="Se"></td>
   </tr>
