@@ -58,8 +58,20 @@ error ceiling, not a floor.
     <td><img src="./MathieuEigs_ZoomOut.png" alt="Mathieu eigs"></td>
   </tr>
   <tr>
-    <td><img src="./RoundTripErr_ce.png" alt="Ce"></td>
-    <td><img src="./RoundTripErr_se.png" alt="Se"></td>
+    <td><img src="./Mathieu_ce2n.png" alt="Ce"></td>
+    <td><img src="./Mathieu_ce2np1.png" alt="Se"></td>
+  </tr>
+  <tr>
+    <td><img src="./Mathieu_se2n.png" alt="Ce"></td>
+    <td><img src="./Mathieu_se2np1.png" alt="Se"></td>
+  </tr>
+  <tr>
+    <td><img src="./Mathiue_mc1_2n.png" alt="Ce"></td>
+    <td><img src="./Mathiue_mc1_2np1.png" alt="Se"></td>
+  </tr>
+  <tr>
+    <td><img src="./Mathiue_ms1_2n.png" alt="Ce"></td>
+    <td><img src="./Mathiue_ms1_2np1.png" alt="Se"></td>
   </tr>
   <tr>
     <td><img src="RoundTripErr_Modmc1.png " alt="Ce"></td>
