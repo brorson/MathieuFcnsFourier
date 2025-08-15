@@ -6,10 +6,10 @@ function plot_eigs()
   N = 1000;
   
   % Domain of q values to examine (for plotting)
-  qs = linspace(0,100,N)';
+  qs = linspace(0,10,N)';
   
   % Number of each type of eigenvalue to track
-  Ne = 20;  % Ne of a and Ne of b
+  Ne = 6;  % Ne of a and Ne of b
 
 
   %---------------------------------------------
@@ -81,8 +81,8 @@ function plot_eigs()
   end
   
   % Turn these on to reproduce the DLMF plot
-  %xlim([0,10]);
-  %ylim([-5,20]);
+  xlim([0,10]);
+  ylim([-5,20]);
   
 
   title('First Mathieu eigenvalues vs. q')
@@ -90,7 +90,7 @@ function plot_eigs()
   ylabel('eigenvalue')
   %legend([1,Ne+1],'ce eigs','se eigs')
   %ylim([-50,90])
-  ylim([-100,300])  
-  legend([h1,h2],'ce eigs','se eigs','Location','North')
+  %ylim([-100,300])  
+  legend([h1,h2],'ce eigs','se eigs','Location','NorthWest')
   
 end
