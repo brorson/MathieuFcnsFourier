@@ -54,8 +54,8 @@ with evaluating the finite-difference derivative, so it represents an
 error ceiling, not a floor.
 <table>
   <tr>
-    <td><img src="./RoundTripErr_ce.png" alt="Ce" width="45%"></td>
-    <td><img src="./RoundTripErr_se.png" alt="Se" width="45%"></td>
+    <td><img src="./RoundTripErr_ce.png" alt="Ce"></td>
+    <td><img src="./RoundTripErr_se.png" alt="Se"></td>
   </tr>
   <tr>
     <td><img src="RoundTripErr_Modmc1.png " alt="Ce" width="45%"></td>
