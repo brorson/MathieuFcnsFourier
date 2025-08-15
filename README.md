@@ -6,10 +6,10 @@ Fourier coeffs are found by creating a recursion matrix, then finding
 its eigenvalues and eigenvectors.  The eigenvectors provide the
 coefficients used in the Fourier sum.  This is the method used by my
 Northeastern REU students in Summer 2025.  Their paper provides
-informationn about the method -- it is linked from here:
+information about the method -- it is linked from here:
 
 (https://sites.google.com/view/rtg-northeastern/undergraduate/independent-research-experience)
-
+</td>
 Here, I fleshed out the algos and translated them to Matlab.  I also
 implemented the modified functions of the second kind.  This directory
 provides the following Mathieu functions:
@@ -52,15 +52,20 @@ varying order and parameter q.  Heat maps of each function's error are
 shown below.  Note that the indicated error includes error associated
 with evaluating the finite-difference derivative, so it represents an
 error ceiling, not a floor.
-
-<img src="./RoundTripErr_ce.png" alt="Ce" width="350">
-<img src="./RoundTripErr_se.png" alt="Se" width="350">
-
-<img src="RoundTripErr_Modmc1.png " alt="Ce" width="45%">
-<img src="RoundTripErr_Modms1.png " alt="Se" width="45%">
-
-<img src="RoundTripErr_Modmc2.png " alt="Ce" width="45%">
-<img src="RoundTripErr_Modms2.png " alt="Se" width="45%">
+<table>
+  <tr>
+    <td><img src="./RoundTripErr_ce.png" alt="Ce"></td>
+    <td><img src="./RoundTripErr_se.png" alt="Se"></td>
+  </tr>
+  <tr>
+    <td><img src="RoundTripErr_Modmc1.png " alt="Ce"></td>
+    <td><img src="RoundTripErr_Modms1.png " alt="Se"></td>
+  </tr>
+  <tr>
+    <td><img src="RoundTripErr_Modmc2.png " alt="Ce"></td>
+    <td><img src="RoundTripErr_Modms2.png " alt="Se"></td>
+  </tr>
+</table>
 
 The goal of this work is to prototype algorithms which may be
 translated to C.
