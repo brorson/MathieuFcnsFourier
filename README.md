@@ -58,12 +58,12 @@ error ceiling, not a floor.
     <td><img src="./RoundTripErr_se.png" alt="Se"></td>
   </tr>
   <tr>
-    <td><img src="RoundTripErr_Modmc1.png " alt="Ce" width="45%"></td>
-    <td><img src="RoundTripErr_Modms1.png " alt="Se" width="45%"></td>
+    <td><img src="RoundTripErr_Modmc1.png " alt="Ce"></td>
+    <td><img src="RoundTripErr_Modms1.png " alt="Se"></td>
   </tr>
   <tr>
-    <td><img src="RoundTripErr_Modmc2.png " alt="Ce" width="45%"></td>
-    <td><img src="RoundTripErr_Modms2.png " alt="Se" width="45%"></td>
+    <td><img src="RoundTripErr_Modmc2.png " alt="Ce"></td>
+    <td><img src="RoundTripErr_Modms2.png " alt="Se"></td>
   </tr>
 </table>
 
