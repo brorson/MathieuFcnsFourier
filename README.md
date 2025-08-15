@@ -53,8 +53,8 @@ shown below.  Note that the indicated error includes error associated
 with evaluating the finite-difference derivative, so it represents an
 error ceiling, not a floor.
 
-<img src="./RoundTripErr_ce.png" alt="Ce" width="45%">
-<img src="./RoundTripErr_se.png" alt="Se" width="45%">
+<img src="./RoundTripErr_ce.png" alt="Ce" width="350">
+<img src="./RoundTripErr_se.png" alt="Se" width="350">
 
 <img src="RoundTripErr_Modmc1.png " alt="Ce" width="45%">
 <img src="RoundTripErr_Modms1.png " alt="Se" width="45%">
