@@ -9,7 +9,7 @@ Northeastern REU students in Summer 2025.  Their paper provides
 informationn about the method -- it is linked from here:
 
 (https://sites.google.com/view/rtg-northeastern/undergraduate/independent-research-experience)
-
+</td>
 Here, I fleshed out the algos and translated them to Matlab.  I also
 implemented the modified functions of the second kind.  This directory
 provides the following Mathieu functions:
@@ -54,22 +54,16 @@ with evaluating the finite-difference derivative, so it represents an
 error ceiling, not a floor.
 <table>
   <tr>
-    <td><img src="./RoundTripErr_ce.png" alt="Ce" width="350"></td>
-    <td><img src="./RoundTripErr_se.png" alt="Se" width="350"></td>
+    <td><img src="./RoundTripErr_ce.png" alt="Ce" width="45%"></td>
+    <td><img src="./RoundTripErr_se.png" alt="Se" width="45%"></td>
   </tr>
-</table>
-
-<table>
   <tr>
     <td><img src="RoundTripErr_Modmc1.png " alt="Ce" width="45%"></td>
     <td><img src="RoundTripErr_Modms1.png " alt="Se" width="45%"></td>
   </tr>
-</table>
-</td>
-<table>
   <tr>
     <td><img src="RoundTripErr_Modmc2.png " alt="Ce" width="45%"></td>
-    <td>img src="RoundTripErr_Modms2.png " alt="Se" width="45%"></td>
+    <td><img src="RoundTripErr_Modms2.png " alt="Se" width="45%"></td>
   </tr>
 </table>
 
