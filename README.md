@@ -6,7 +6,7 @@ Fourier coeffs are found by creating a recursion matrix, then finding
 its eigenvalues and eigenvectors.  The eigenvectors provide the
 coefficients used in the Fourier sum.  This is the method used by my
 Northeastern REU students in Summer 2025.  Their paper provides
-informationn about the method -- it is linked from here:
+information about the method -- it is linked from here:
 
 (https://sites.google.com/view/rtg-northeastern/undergraduate/independent-research-experience)
 </td>
