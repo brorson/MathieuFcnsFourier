@@ -66,20 +66,32 @@ error ceiling, not a floor.
     <td><img src="./Mathieu_se2np1.png" alt="Se"></td>
   </tr>
   <tr>
-    <td><img src="./Mathieu_mc1_2n.png" alt="Ce"></td>
-    <td><img src="./Mathieu_mc1_2np1.png" alt="Se"></td>
+    <td><img src="./Mathieu_mc1_2n.png" alt="Mc1"></td>
+    <td><img src="./Mathieu_mc1_2np1.png" alt="Mc1"></td>
   </tr>
   <tr>
-    <td><img src="./Mathieu_ms1_2n.png" alt="Ce"></td>
-    <td><img src="./Mathieu_ms1_2np1.png" alt="Se"></td>
+    <td><img src="./Mathieu_ms1_2n.png" alt="Ms1"></td>
+    <td><img src="./Mathieu_ms1_2np1.png" alt="Ms1"></td>
   </tr>
   <tr>
-    <td><img src="RoundTripErr_Modmc1.png " alt="Ce"></td>
-    <td><img src="RoundTripErr_Modms1.png " alt="Se"></td>
+    <td><img src="./Mathieu_mc2_2n.png" alt="Mc2"></td>
+    <td><img src="./Mathieu_mc2_2np1.png" alt="Mc2"></td>
   </tr>
   <tr>
-    <td><img src="RoundTripErr_Modmc2.png " alt="Ce"></td>
-    <td><img src="RoundTripErr_Modms2.png " alt="Se"></td>
+    <td><img src="./Mathieu_ms2_2n.png" alt="Ms2"></td>
+    <td><img src="./Mathieu_ms2_2np1.png" alt="Ms2"></td>
+  </tr>
+  <tr>
+    <td><img src="RoundTripErr_ce.png " alt="RT err -- Ce"></td>
+    <td><img src="RoundTripErr_se.png " alt="RT err -- Se"></td>
+  </tr>
+  <tr>
+    <td><img src="RoundTripErr_Modmc1.png " alt="RT err -- Mc1"></td>
+    <td><img src="RoundTripErr_Modms1.png " alt="RT err -- Ms1"></td>
+  </tr>
+  <tr>
+    <td><img src="RoundTripErr_Modmc2.png " alt="RT err -- Mc2"></td>
+    <td><img src="RoundTripErr_Modms2.png " alt="RT err -- Ms2"></td>
   </tr>
 </table>
 
