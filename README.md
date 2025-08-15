@@ -66,12 +66,12 @@ error ceiling, not a floor.
     <td><img src="./Mathieu_se2np1.png" alt="Se"></td>
   </tr>
   <tr>
-    <td><img src="./Mathiue_mc1_2n.png" alt="Ce"></td>
-    <td><img src="./Mathiue_mc1_2np1.png" alt="Se"></td>
+    <td><img src="./Mathieu_mc1_2n.png" alt="Ce"></td>
+    <td><img src="./Mathieu_mc1_2np1.png" alt="Se"></td>
   </tr>
   <tr>
-    <td><img src="./Mathiue_ms1_2n.png" alt="Ce"></td>
-    <td><img src="./Mathiue_ms1_2np1.png" alt="Se"></td>
+    <td><img src="./Mathieu_ms1_2n.png" alt="Ce"></td>
+    <td><img src="./Mathieu_ms1_2np1.png" alt="Se"></td>
   </tr>
   <tr>
     <td><img src="RoundTripErr_Modmc1.png " alt="Ce"></td>
