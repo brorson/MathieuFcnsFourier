@@ -53,8 +53,8 @@ shown below.  Note that the indicated error includes error associated
 with evaluating the finite-difference derivative, so it represents an
 error ceiling, not a floor.
 
-!(./RoundTripErr_ce.png "Ce")
-!(./RoundTripErr_ce.png "Se")
+![](./RoundTripErr_ce.png "Ce")
+![](./RoundTripErr_ce.png "Se")
 
 The goal of this work is to prototype algorithms which may be
 translated to C.
