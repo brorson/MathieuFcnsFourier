@@ -2,8 +2,8 @@ function plot_mathieu_modms2()
   % This plots the modified Mathieu Ms fcns of second kind.
     
   q = 1;
-  vmax = 5;
-  v = linspace(0,vmax,5000);
+  vmax = 4;
+  v = linspace(0,vmax,1000);
 
   leg = {};
   
@@ -19,7 +19,7 @@ function plot_mathieu_modms2()
   end  
   title('Modified Mathieu of second kind Ms2n')
   legend(leg)
-  ylim([-6,6])
+  ylim([-2,2])
   
   leg = {};
   % Next do odd Ms fcns
@@ -34,14 +34,14 @@ function plot_mathieu_modms2()
   end  
   title('Modified Mathieu of second kind Ms2n+1')
   legend(leg)
-  ylim([-6,6])  
+  ylim([-2,2])  
 
   %==============================================
   % Compare against besselj for large u per
   % DLMF 28.20.11
   figure(4)
   m=7;
-  N = 10000;
+  N = 1000;
   u = linspace(0,vmax,N);
   q = 1;
   yy = bessely(m,2*sqrt(q)*cosh(u));

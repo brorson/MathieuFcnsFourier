@@ -3,7 +3,7 @@ function plot_mathieu_modmc2()
     
   q = 1;
 
-  v = linspace(0,5,5000)';
+  v = linspace(0,4,1000)';
 
   leg = {};
   
@@ -19,7 +19,7 @@ function plot_mathieu_modmc2()
   end  
   title('Modified Mathieu of second kind Mc2n')
   legend(leg,'Location','SouthEast')
-  ylim([-6,6])
+  ylim([-2,2])
   
   leg = {};
   % Next do odd ce fcns
@@ -34,7 +34,7 @@ function plot_mathieu_modmc2()
   end  
   title('Modified Mathieu of second kind Mc2n+1')
   legend(leg, 'Location','SouthEast')
-  ylim([-6,6])
+  ylim([-2,2])
 
   %==============================================
   % Compare against bessely for large u per
