@@ -52,15 +52,26 @@ varying order and parameter q.  Heat maps of each function's error are
 shown below.  Note that the indicated error includes error associated
 with evaluating the finite-difference derivative, so it represents an
 error ceiling, not a floor.
-
+<table>
+  <tr>
 <img src="./RoundTripErr_ce.png" alt="Ce" width="350">
 <img src="./RoundTripErr_se.png" alt="Se" width="350">
+  </tr>
+</table>
 
+<table>
+  <tr>
 <img src="RoundTripErr_Modmc1.png " alt="Ce" width="45%">
 <img src="RoundTripErr_Modms1.png " alt="Se" width="45%">
+  </tr>
+</table>
 
+<table>
+  <tr>
 <img src="RoundTripErr_Modmc2.png " alt="Ce" width="45%">
 <img src="RoundTripErr_Modms2.png " alt="Se" width="45%">
+  </tr>
+</table>
 
 The goal of this work is to prototype algorithms which may be
 translated to C.
