@@ -53,29 +53,51 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
     Mcdp = zeros(size(u));
     Mcdm = zeros(size(u));
     for k=(N-1):-1:0
-    %for k=0:(N-1)
       if (c==0)
         % Non-adaptive calc
         Jks = besselj(k,s);
         Jkt = besselj(k,t);
-
         Jdks = besseljd(k,s);
         Jdkt = besseljd(k,t);
+	%fprintf('Jks = %20.17e\n', Jks)
+	%fprintf('Jkt = %20.17e\n', Jkt)
 
-	      % I don't use the (-1)^n idiom.  Instead I just either add or subtract
-	      % terms directly.  The goal is to minimize catastrophic cancellation
-	      % by summing pos with pos and neg with neg.  Then I subtract
-	      % the whole thing below.
-        if (mod(k,2) == 0)
-          % Pos terms
-          Mcp = Mcp + A(k+1)*(Jks.*Jkt);
-          Mcdp = Mcdp + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt);
-         else
-          % Neg terms.
-          Mcm = Mcm + A(k+1)*(Jks.*Jkt);
-          Mcdm = Mcdm + A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt);
-        end
-
+	% I don't use the (-1)^n idiom.  Instead I just either add or subtract
+	% terms directly.  The goal is to minimize catastrophic cancellation
+	% by summing pos with pos and neg with neg.  Then I subtract
+	% the whole thing below.
+	tt = A(k+1)*(Jks.*Jkt);
+	ttd = A(k+1)*(exp(u).*Jks.*Jdkt - exp(-u).*Jdks.*Jkt);
+	%fprintf('k = %d, tt = %20.17e\n', k, tt)
+	
+	if (mod(k,2)==0)
+	  % Even terms have + sign, 
+	  sgn = 1;
+	else
+	  % Odd terms have - sign
+	  sgn = -1;
+	end
+	
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	if (tt<0)
+	  % Neg terms
+	  Mcm = Mcm + tt;
+	else
+	  % Pos terms
+	  Mcp = Mcp + tt;
+	end
+	
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	if (ttd<0)
+	  % Neg terms
+	  Mcdm = Mcdm + ttd;
+	else
+	  % Pos terms
+	  Mcdp = Mcdp + ttd;
+	end
+	
       else  % if (c==0)
         % Adaptive calc
         Jkmcs = besselj(k-c,s);
@@ -88,31 +110,50 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
         Jdkpct = besseljd(k+c,t);
         Jdkmct = besseljd(k-c,t);
 
-        if (mod(k,2) == 0)
-          % Even plus terms
-          Mcp = Mcp + A(k+1)*(Jkmcs.*Jkpct + Jkpcs.*Jkmct);
-          Mcdp = Mcdp + A(k+1)* ...
+	tt = A(k+1)*(Jkmcs.*Jkpct + Jkpcs.*Jkmct);
+	ttd = A(k+1)* ...
             (exp(u).*(Jkmcs.*Jdkpct + Jkpcs.*Jdkmct) - ...
             exp(-u).*(Jdkmcs.*Jkpct + Jdkpcs.*Jkmct)) ;
-        else
-          % Odd negative terms
-          Mcm = Mcm + A(k+1)*(Jkmcs.*Jkpct + Jkpcs.*Jkmct);
-          Mcdm = Mcdm + A(k+1)* ...
-            (exp(u).*(Jkmcs.*Jdkpct + Jkpcs.*Jdkmct) - ...
-            exp(-u).*(Jdkmcs.*Jkpct + Jdkpcs.*Jkmct)) ;
-        end
+	%fprintf('k = %d, tt = %e\n', k, tt)
+	
+	if (mod(k,2)==0)
+	  % Even terms have + sign
+	  sgn = 1;
+	else
+	  % Odd terms have - sign
+	  sgn = -1;
+	end
+
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	if (tt<0)
+	  Mcm = Mcm + tt;
+	else
+	  Mcp = Mcp + tt;
+	end
+	
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	if (ttd<0)
+	  Mcdm = Mcdm + ttd;
+	else
+	  Mcdp = Mcdp + ttd;
+	end
+
       end
     end
-    % Subtract for now.
-    % Later implement sort and sum, or Kahan summation if needed.
-    Mc = Mcp - Mcm;
-    %fprintf('Mcp = %e, Mcm = %e, Mc = %e\n', Mcp, Mcm, Mc)    
-    Mcd = Mcdp - Mcdm;
+
+    % Add pos and neg terms to get final result
+    %fprintf('Mcp = %e, Mcm = %e\n', Mcp, Mcm)
+    Mc = (Mcp + Mcm);
+    Mcd = (Mcdp + Mcdm);
 
     % Do normalization.  Note normalization depends upon c.
-    sgn = m/2;
-    Mc = (((-1)^sgn)/A(c+1))*Mc;    
-    Mcd = sqrt(q)*(((-1)^sgn)/A(c+1))*Mcd;
+    sgn = (-1)^(m/2);
+    %fprintf('Before normalization, sgn = %d, A(c+1) = %e, Mc = %e\n', sgn, A(c+1), Mc)
+    Mc = (sgn/A(c+1))*Mc;    
+    Mcd = sqrt(q)*(sgn/A(c+1))*Mcd;
+    %fprintf('After normalization, Mc = %e\n', Mc)
 
   else
     % Odd -- m = 1, 3, 5, 7 ...
@@ -122,6 +163,7 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
     Mcm = zeros(size(u));
     Mcdp = zeros(size(u));
     Mcdm = zeros(size(u));
+
     for k=(N-1):-1:0
       if (c==0)
         % Non-adaptive calc
@@ -129,25 +171,46 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
         Jkp1s = besselj(k+1,s);
         Jkt = besselj(k,t);
         Jkp1t = besselj(k+1,t);
-  
+
         Jdks = besseljd(k,s);
         Jdkp1s = besseljd(k+1,s);
         Jdkt = besseljd(k,t);
         Jdkp1t = besseljd(k+1,t);
+	
+	%fprintf('Jks = %20.17e\n', Jks)
+	%fprintf('Jkp1s = %20.17e\n', Jkp1s)
+	%fprintf('Jkt = %20.17e\n', Jkt)
+	%fprintf('Jkp1t = %20.17e\n', Jkp1t)	
         
-        if (mod(k,2) == 0)
-          % Even plus terms
-          Mcp = Mcp + A(k+1)*(Jks.*Jkp1t + Jkp1s.*Jkt);
-          Mcdp = Mcdp + A(k+1)* ...
+	tt = A(k+1)*(Jks.*Jkp1t + Jkp1s.*Jkt);
+	ttd = A(k+1)* ...
 	          (exp(u).*(Jks.*Jdkp1t + Jkp1s.*Jdkt) - ...
 	          exp(-u).*(Jdks.*Jkp1t + Jdkp1s.*Jkt) ) ;
-        else
-          % Odd minus terms.
-          Mcm = Mcm + A(k+1)*(Jks.*Jkp1t + Jkp1s.*Jkt);
-          Mcdm = Mcdm + A(k+1)* ...
-	          (exp(u).*(Jks.*Jdkp1t + Jkp1s.*Jdkt) - ...
-	          exp(-u).*(Jdks.*Jkp1t + Jdkp1s.*Jkt) ) ;
-        end
+	%fprintf('k = %d, tt = %20.17e\n', k, tt)
+	
+	if (mod(k,2)==0)
+	  % Even terms have + sign
+	  sgn = 1.0;
+	else
+	  % Odd terms have - sign
+	  sgn = -1.0;
+	end
+
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	if (tt<0)
+	  Mcm = Mcm + tt;
+	else
+	  Mcp = Mcp + tt;
+	end
+	
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	if (ttd<0)
+	  Mcdm = Mcdm + ttd;
+	else
+	  Mcdp = Mcdp + ttd;
+	end
 
       else  % if (c==0)
         % Adaptive calc
@@ -161,30 +224,53 @@ function [Mc,Mcd] = mathieu_modmc1(m, q, u)
         Jdkpct = besseljd(k+c+1,t);
         Jdkmct = besseljd(k-c,t);
 
-        if (mod(k,2) == 0)
-          % Even plus terms
-          Mcp = Mcp + A(k+1)*(Jkmcs.*Jkpct + Jkpcs.*Jkmct);
-          Mcdp = Mcdp + A(k+1)* ...
+	tt = A(k+1)*(Jkmcs.*Jkpct + Jkpcs.*Jkmct);
+	ttd = A(k+1)* ...
 	          (exp(u).*(Jkmcs.*Jdkpct + Jkpcs.*Jdkmct) - ...
 	          exp(-u).*(Jdkmcs.*Jkpct + Jdkpcs.*Jkmct) ) ;
-        else
-          % Odd minus terms
-          Mcm = Mcm + A(k+1)*(Jkmcs.*Jkpct + Jkpcs.*Jkmct);
-          Mcdm = Mcdm + A(k+1)* ...
-	          (exp(u).*(Jkmcs.*Jdkpct + Jkpcs.*Jdkmct) - ...
-	          exp(-u).*(Jdkmcs.*Jkpct + Jdkpcs.*Jkmct) ) ;
-        end
+	%fprintf('k = %d, tt = %e, Mc = %e\n', k, tt, Mc)
+	
+	if (mod(k,2)==0)
+	  % Even terms have + sign
+	  sgn = 1.0;
+	else
+	  % Odd terms have - sign
+	  sgn = -1.0;
+	end
+
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	if (tt<0)
+	  Mcm = Mcm + tt;
+	else
+	  Mcp = Mcp + tt;
+	end
+	
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	if (ttd<0)
+	  Mcdm = Mcdm + ttd;
+	else
+	  Mcdp = Mcdp + ttd;
+	end
+	
       end
 
     end
-    Mc = Mcp - Mcm;
-    %fprintf('Mcp = %e, Mcm = %e, Mc = %e\n', Mcp, Mcm, Mc)    
-    Mcd = Mcdp - Mcdm;
+    
+    % Add pos and neg terms to get final result
+    %fprintf('Mcp = %e, Mcm = %e\n', Mcp, Mcm)
+    Mc = (Mcp + Mcm);
+    %fprintf('Mcp = %20.17e, Mcm = %20.17e, Mc = %20.17e\n', Mcp, Mcm, Mc);
+    Mcd = (Mcdp + Mcdm);
 
     % Do normalization.  Note normalization depends upon c.
-    sgn = (m-1)/2;
-    Mc = (((-1)^sgn)/A(c+1))*Mc;
-    Mcd = sqrt(q)*(((-1)^sgn)/A(c+1))*Mcd;    
+    sgn = (-1)^((m-1)/2);
+    %fprintf('Before normalization, sgn = %d, Mc = %e\n', sgn, Mc)
+    Mc = (sgn/A(c+1))*Mc;
+    Mcd = sqrt(q)*(sgn/A(c+1))*Mcd;    
+    %fprintf('After normalization, Mc = %e\n', Mc)
+
   end
 
   % At this point, fcns should be properly signed and normalized.
