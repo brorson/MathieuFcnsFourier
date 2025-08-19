@@ -42,7 +42,7 @@ function [pass, fail] = test_mathieu_modms2_idents()
 	figure(2)
 	plot(v,diff)
 	title('Difference')
-	pause()
+	%pause()
 	close all; 
       else
 	pass = pass+1;

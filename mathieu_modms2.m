@@ -72,18 +72,37 @@ function [Ms,Msd] = mathieu_modms2(m, q, u)
 	Jdkp2s = besseljd(k+2,s);
 	Ydkt = besselyd(k,t);
 
-	if (mod(k,2) == 0)
-	  % Pos terms
-	  Msp = Msp + B(k+1).*(Jks.*Ykp2t - Jkp2s.*Ykt);
-	  Msdp = Msdp + B(k+1)*...
+	tt =  B(k+1).*(Jks.*Ykp2t - Jkp2s.*Ykt);
+	ttd =  B(k+1)*...
 		 (exp(u).*(Jks.*Ydkp2t - Jkp2s.*Ydkt) - ...
 		  exp(-u).*(Jdks.*Ykp2t - Jdkp2s.*Ykt));
+	
+        if (mod(k,2) == 0)
+	  sgn = 1;
 	else
+	  sgn = -1;
+	end
+
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	%Msp = Msp + tt;
+	if (tt<0) 
 	  % Neg terms
-	  Msm = Msm + B(k+1).*(Jks.*Ykp2t - Jkp2s.*Ykt);
-	  Msdm = Msdm + B(k+1)*...
-		 (exp(u).*(Jks.*Ydkp2t - Jkp2s.*Ydkt) - ...
-		  exp(-u).*(Jdks.*Ykp2t - Jdkp2s.*Ykt));
+	  Msm = Msm + tt;
+	else 
+	  % Pos terms
+	  Msp = Msp + tt;
+	end
+      
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	%Msdp = Msdp + tt;	
+	if (ttd<0) 
+	  % Neg terms
+	  Msdm = Msdm + ttd;
+	else 
+	  % Pos terms
+	  Msdp = Msdp + ttd;
 	end
       
       else  % if (c==0) ...
@@ -98,27 +117,46 @@ function [Ms,Msd] = mathieu_modms2(m, q, u)
         Jdkpcs = besseljd(k+c+2,s);
         Ydkmct = besselyd(k-c,t);
 	
+	tt = B(k+1)*(Jkmcs.*Ykpct - Jkpcs.*Ykmct);
+	ttd =  B(k+1)* ...
+		 (exp(u).*(Jkmcs.*Ydkpct - Jkpcs.*Ydkmct) - ...
+		  exp(-u).*(Jdkmcs.*Ykpct - Jdkpcs.*Ykmct));
+	
         if (mod(k,2) == 0)
-          % Even plus terms
-          Msp = Msp + B(k+1)*(Jkmcs.*Ykpct - Jkpcs.*Ykmct);
-          Msdp = Msdp + B(k+1)* ...
-		 (exp(u).*(Jkmcs.*Ydkpct - Jkpcs.*Ydkmct) - ...
-		  exp(-u).*(Jdkmcs.*Ykpct - Jdkpcs.*Ykmct));
-        else
-          % Odd negative terms
-          Msm = Msm + B(k+1)*(Jkmcs.*Ykpct - Jkpcs.*Ykmct);
-          Msdm = Msdm + B(k+1)* ...
-		 (exp(u).*(Jkmcs.*Ydkpct - Jkpcs.*Ydkmct) - ...
-		  exp(-u).*(Jdkmcs.*Ykpct - Jdkpcs.*Ykmct));
-        end
-      end
+	  sgn = 1;
+	else
+	  sgn = -1;
+	end
+
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	%Msp = Msp + tt;
+	if (tt<0) 
+	  % Neg terms
+	  Msm = Msm + tt;
+	else 
+	  % Pos terms
+	  Msp = Msp + tt;
+	end
+      
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	%Msdp = Msdp + tt;
+	if (ttd<0) 
+	  % Neg terms
+	  Msdm = Msdm + ttd;
+	else 
+	  % Pos terms
+	  Msdp = Msdp + ttd;
+	end
+
+      end  % if (c==0) ...
       
     end   % for k = ...
-    % Subtract for now.
-    % Later implement sort and sum, or Kahan summation if needed.
-    Ms = Msp - Msm;
+    % Sum pos and neg terms to get final answer
+    Ms = Msp + Msm;
     %fprintf('Msp = %e, Msm = %e, Ms = %e\n', Msp, Msm, Ms)    
-    Msd = Msdp - Msdm;
+    Msd = Msdp + Msdm;
     
     % Do normalization.
     sgn = (m-2)/2;
@@ -148,18 +186,39 @@ function [Ms,Msd] = mathieu_modms2(m, q, u)
 	Jdkp1s = besseljd(k+1,s);
 	Ydkp1t = besselyd(k+1,t);
 	
-	if (mod(k,2) == 0)
-	  % Pos terms
-	  Msp = Msp + B(k+1).*(Jks.*Ykp1t - Jkp1s.*Ykt);
-	  Msdp = Msdp + B(k+1)*...
+	tt = B(k+1).*(Jks.*Ykp1t - Jkp1s.*Ykt);
+	ttd =  B(k+1)*...
 		 (exp(u).*(Jks.*Ydkp1t - Jkp1s.*Ydkt) - ...
-		  exp(-u).*(Jdks.*Ykp1t - Jdkp1s.*Ykt));
-	else	
-	  Msm = Msm + B(k+1).*(Jks.*Ykp1t - Jkp1s.*Ykt);
-	  Msdm = Msdm + B(k+1)*...
-		 (exp(u).*(Jks.*Ydkp1t - Jkp1s.*Ydkt) - ...
-		  exp(-u).*(Jdks.*Ykp1t - Jdkp1s.*Ykt));
+		  exp(-u).*(Jdks.*Ykp1t - Jdkp1s.*Ykt)); 
+
+        if (mod(k,2) == 0)
+	  sgn = 1;
+	else
+	  sgn = -1;
 	end
+
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	%Msp = Msp + tt;
+	if (tt<0) 
+	  % Neg terms
+	  Msm = Msm + tt;
+	else 
+	  % Pos terms
+	  Msp = Msp + tt;
+	end
+      
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	%Msdp = Msdp + tt;
+	if (ttd<0) 
+	  % Neg terms
+	  Msdm = Msdm + ttd;
+	else 
+	  % Pos terms
+	  Msdp = Msdp + ttd;
+	end
+
 	
       else % if (c==0)
 	% Adaptive calc
@@ -173,28 +232,47 @@ function [Ms,Msd] = mathieu_modms2(m, q, u)
         Ydkpct = besselyd(k+c+1,t);
         Ydkmct = besselyd(k-c,t);
 	
+	tt = B(k+1)*(Jkmcs.*Ykpct - Jkpcs.*Ykmct);
+	ttd = B(k+1)* ...
+		 (exp(u).*(Jkmcs.*Ydkpct - Jkpcs.*Ydkmct) - ...
+                  exp(-u).*(Jdkmcs.*Ykpct - Jdkpcs.*Ykmct) ) ; 
+
         if (mod(k,2) == 0)
-          % Even plus terms
-          Msp = Msp + B(k+1)*(Jkmcs.*Ykpct - Jkpcs.*Ykmct);
-          Msdp = Msdp + B(k+1)* ...
-		 (exp(u).*(Jkmcs.*Ydkpct - Jkpcs.*Ydkmct) - ...
-                  exp(-u).*(Jdkmcs.*Ykpct - Jdkpcs.*Ykmct) ) ;
-        else
-          % Odd minus terms
-          Msm = Msm + B(k+1)*(Jkmcs.*Ykpct - Jkpcs.*Ykmct);
-          Msdm = Msdm + B(k+1)* ...
-		 (exp(u).*(Jkmcs.*Ydkpct - Jkpcs.*Ydkmct) - ...
-                  exp(-u).*(Jdkmcs.*Ykpct - Jdkpcs.*Ykmct) ) ;
-        end
+	  sgn = 1;
+	else
+	  sgn = -1;
+	end
+
+	% Do sum using separate sums for + and -
+	tt = sgn*tt;
+	%Msp = Msp + tt;
+	if (tt<0) 
+	  % Neg terms
+	  Msm = Msm + tt;
+	else 
+	  % Pos terms
+	  Msp = Msp + tt;
+	end
+      
+	% Do sum using separate sums for + and -
+	ttd = sgn*ttd;
+	%Msdp = Msdp + tt;
+	if (ttd<0) 
+	  % Neg terms
+	  Msdm = Msdm + ttd;
+	else 
+	  % Pos terms
+	  Msdp = Msdp + ttd;
+	end
+
       end
 
     end  % for k = ...
 
-    % Subtract for now.
-    % Later implement sort and sum, or Kahan summation if needed.
-    Ms = Msp - Msm;
+    % Sum pos and neg terms to get final answer
+    Ms = Msp + Msm;
     %fprintf('Msp = %e, Msm = %e, Ms = %e\n', Msp, Msm, Ms)    
-    Msd = Msdp - Msdm;
+    Msd = Msdp + Msdm;
 
     % Do normalization.
     sgn = (m-1)/2;
